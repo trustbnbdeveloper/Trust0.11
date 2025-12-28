@@ -1,0 +1,7 @@
+{
+  "name": "TrustBnB Ecosystem",
+  "description": "Integrated Property Management Ecosystem transforming diaspora-owned Albanian homes into high-performing rentals with transparency and Swiss-bank level security.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}

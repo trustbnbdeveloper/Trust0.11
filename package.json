@@ -1,0 +1,27 @@
+{
+  "name": "trustbnb-ecosystem",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "deploy": "npx vite build --outDir outdist && npx wrangler pages deploy ./outdist --project-name trustbnb-ecosystem --branch main",
+    "deploy:worker": "npx wrangler publish",
+    "dev:worker": "npx wrangler dev"
+  },
+  "dependencies": {
+    "lucide-react": "0.292.0",
+    "react-dom": "18.3.1",
+    "recharts": "2.12.7",
+    "@google/genai": "^1.33.0",
+    "react": "18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.0"
+  }
+}

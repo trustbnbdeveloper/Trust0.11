@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TrustBnB - Integrated Property Ecosystem</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      // Polyfill process for browser environment to prevent crashes in libraries
+      window.process = { env: { NODE_ENV: 'production' } };
+
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              trust: {
+                blue: '#0B1C2D',
+                gray: '#F2F4F6',
+                beige: '#E6DED3',
+                green: '#2FA36B',
+                white: '#FFFFFF',
+                darkbg: '#050E17',
+                darkcard: '#0F243A'
+              }
+            },
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              serif: ['Playfair Display', 'serif'],
+            },
+            animation: {
+              'infinite-scroll': 'infinite-scroll 25s linear infinite',
+            },
+            keyframes: {
+              'infinite-scroll': {
+                from: { transform: 'translateX(0)' },
+                to: { transform: 'translateX(-50%)' },
+              }
+            }
+          }
+        }
+      };
+    </script>
+    <style>
+      /* Custom utility to hide scrollbar on mobile/tablet but allow touch scroll */
+      @media (max-width: 1024px) {
+        .mobile-scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+        .mobile-scrollbar-hide {
+          -ms-overflow-style: none;  /* IE and Edge */
+          scrollbar-width: none;  /* Firefox */
+        }
+      }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="/index.css">
+  <script type="importmap">
+{
+  "imports": {
+    "lucide-react": "https://esm.sh/lucide-react@0.292.0",
+    "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
+    "react-dom": "https://esm.sh/react-dom@18.3.1",
+    "recharts": "https://esm.sh/recharts@2.12.7?external=react,react-dom",
+    "@google/genai": "https://esm.sh/@google/genai@^1.33.0",
+    "react": "https://esm.sh/react@18.3.1",
+    "react/": "https://esm.sh/react@18.3.1/"
+  }
+}
+</script>
+  <script type="module" crossorigin src="/assets/index-5saZ4ecK.js"></script>
+</head>
+  <body class="bg-white dark:bg-trust-darkbg transition-colors duration-200">
+    <div id="root"></div>
+</body>
+</html>

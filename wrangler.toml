@@ -1,0 +1,11 @@
+name = "trustbnb-gemini-proxy"
+main = "workers/gemini-proxy.ts"
+compatibility_date = "2025-12-28"
+account_id = "YOUR_ACCOUNT_ID"
+workers_dev = true
+
+# Optional: you can add routes to bind the worker to your domain
+# routes = ["example.com/api/*"]
+
+# Do NOT store secrets here. Use:
+# npx wrangler secret put GEMINI_API_KEY
