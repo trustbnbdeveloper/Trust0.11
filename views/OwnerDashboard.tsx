@@ -905,6 +905,7 @@ export const OwnerDashboard: React.FC = () => {
                         </div>
                       </div>
                     </GlassCard>
+                  ))}
                 </div>
               </div>
             </div>
@@ -931,270 +932,268 @@ export const OwnerDashboard: React.FC = () => {
               <button className="text-gray-400 hover:text-trust-blue dark:hover:text-white">
                 <ArrowUpRight size={20} />
               </button>
-            </div>
-            <div className="p-6">
-              <div className="grid md:grid-cols-3 gap-6">
-                {MOCK_TASKS.map(task => (
-                  <div key={task.id} className="border border-gray-200 dark:border-gray-600 rounded-lg p-4 flex flex-col gap-2">
-                    <div className="flex justify-between items-start">
-                      <span className={`text-[10px] px-2 py-1 rounded font-bold uppercase tracking-wider ${task.type === 'Renovation' ? 'bg-purple-100 text-purple-700' :
-                        task.type === 'Repair' ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700'
-                        }`}>
-                        {task.type}
-                      </span>
-                      <span className="text-xs text-gray-400">{task.dateScheduled}</span>
+              <div className="p-6">
+                <div className="grid md:grid-cols-3 gap-6">
+                  {MOCK_TASKS.map(task => (
+                    <div key={task.id} className="border border-gray-200 dark:border-gray-600 rounded-lg p-4 flex flex-col gap-2">
+                      <div className="flex justify-between items-start">
+                        <span className={`text-[10px] px-2 py-1 rounded font-bold uppercase tracking-wider ${task.type === 'Renovation' ? 'bg-purple-100 text-purple-700' :
+                          task.type === 'Repair' ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700'
+                          }`}>
+                          {task.type}
+                        </span>
+                        <span className="text-xs text-gray-400">{task.dateScheduled}</span>
+                      </div>
+                      <h4 className="font-medium text-trust-blue dark:text-white text-sm">{task.title}</h4>
+                      <div className="mt-auto pt-2 flex justify-between items-center border-t border-gray-100 dark:border-gray-700">
+                        <span className="text-xs text-gray-500">Est. Cost: <span className="font-semibold">{privacyMode ? '€***' : `€${task.costEstimate}`}</span></span>
+                        <span className={`text-xs font-medium ${task.status === 'In Progress' ? 'text-blue-600' :
+                          task.status === 'Completed' ? 'text-green-600' : 'text-gray-500'
+                          }`}>
+                          {task.status}
+                        </span>
+                      </div>
                     </div>
-                    <h4 className="font-medium text-trust-blue dark:text-white text-sm">{task.title}</h4>
-                    <div className="mt-auto pt-2 flex justify-between items-center border-t border-gray-100 dark:border-gray-700">
-                      <span className="text-xs text-gray-500">Est. Cost: <span className="font-semibold">{privacyMode ? '€***' : `€${task.costEstimate}`}</span></span>
-                      <span className={`text-xs font-medium ${task.status === 'In Progress' ? 'text-blue-600' :
-                        task.status === 'Completed' ? 'text-green-600' : 'text-gray-500'
-                        }`}>
-                        {task.status}
-                      </span>
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
+            </GlassCard>
+
+            {/* Transactions Table */}
+            <GlassCard
+              variant="elevated"
+              padding="none"
+              className="mt-8 transition-colors animate-in fade-in slide-in-from-bottom-8 duration-700"
+            >
+              <div className="p-6 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center bg-gray-50/30 dark:bg-black/20">
+                <h3 className="font-serif font-bold text-trust-blue dark:text-white text-xl">Recent Financial Activity</h3>
+                <button className="text-gray-400 hover:text-trust-blue dark:hover:text-white">
+                  <ArrowUpRight size={20} />
+                </button>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-trust-gray dark:bg-gray-800 text-gray-500 dark:text-gray-400 uppercase text-xs">
+                    <tr>
+                      <th className="px-6 py-3 font-medium">Date</th>
+                      <th className="px-6 py-3 font-medium">Description</th>
+                      <th className="px-6 py-3 font-medium">Category</th>
+                      <th className="px-6 py-3 font-medium">Ledger Hash</th>
+                      <th className="px-6 py-3 font-medium text-right">Amount</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
+                    {MOCK_TRANSACTIONS.map((tx) => (
+                      <tr key={tx.id} className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                        <td className="px-6 py-4 text-gray-600 dark:text-gray-400">{tx.date}</td>
+                        <td className="px-6 py-4 font-medium text-trust-blue dark:text-white">{tx.description}</td>
+                        <td className="px-6 py-4">
+                          <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs text-gray-500 dark:text-gray-300">{tx.category}</span>
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className="font-mono text-[10px] text-gray-400">{tx.hash}</span>
+                        </td>
+                        <td className={`px-6 py-4 text-right font-medium ${tx.type === 'Credit' ? 'text-trust-green' : 'text-gray-800 dark:text-gray-200'}`}>
+                          {privacyMode ? <span className="blur-sm select-none text-xs text-gray-400">ENCRYPTED</span> : (
+                            <>
+                              {tx.type === 'Debit' ? '-' : '+'}€{tx.amount}
+                            </>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </GlassCard>
+          </>
+        )
+        }
+      </main >
+
+      {/* Floating Chat Buttons */}
+      < div className="fixed bottom-6 right-6 flex flex-col gap-3 z-40" >
+
+        {/* Support Chat Button */}
+        < button
+          onClick={() => {
+            setIsSupportOpen(!isSupportOpen);
+            setIsChatOpen(false); // Close AI chat if open
+          }}
+          className="w-14 h-14 bg-trust-blue text-white rounded-full shadow-lg hover:bg-opacity-90 transition-transform hover:scale-105 flex items-center justify-center relative group"
+          title="Contact Support"
+        >
+          <div className="absolute inset-0 bg-trust-blue rounded-full animate-ping opacity-20"></div>
+          {
+            unreadSupportCount > 0 && (
+              <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-[10px] flex items-center justify-center rounded-full font-bold border-2 border-white dark:border-trust-darkbg z-10">
+                {unreadSupportCount}
+              </span>
+            )
+          }
+          <MessageSquare size={24} />
+          {/* Tooltip */}
+          <div className="absolute right-full mr-3 top-1/2 -translate-y-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+            Admin Support
           </div>
-      </GlassCard>
-
-      {/* Transactions Table */}
-      <GlassCard
-        variant="elevated"
-        padding="none"
-        className="mt-8 transition-colors animate-in fade-in slide-in-from-bottom-8 duration-700"
-      >
-        <div className="p-6 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center bg-gray-50/30 dark:bg-black/20">
-          <h3 className="font-serif font-bold text-trust-blue dark:text-white text-xl">Recent Financial Activity</h3>
-          <button className="text-gray-400 hover:text-trust-blue dark:hover:text-white">
-            <ArrowUpRight size={20} />
-          </button>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm text-left">
-            <thead className="bg-trust-gray dark:bg-gray-800 text-gray-500 dark:text-gray-400 uppercase text-xs">
-              <tr>
-                <th className="px-6 py-3 font-medium">Date</th>
-                <th className="px-6 py-3 font-medium">Description</th>
-                <th className="px-6 py-3 font-medium">Category</th>
-                <th className="px-6 py-3 font-medium">Ledger Hash</th>
-                <th className="px-6 py-3 font-medium text-right">Amount</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
-              {MOCK_TRANSACTIONS.map((tx) => (
-                <tr key={tx.id} className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-                  <td className="px-6 py-4 text-gray-600 dark:text-gray-400">{tx.date}</td>
-                  <td className="px-6 py-4 font-medium text-trust-blue dark:text-white">{tx.description}</td>
-                  <td className="px-6 py-4">
-                    <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs text-gray-500 dark:text-gray-300">{tx.category}</span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className="font-mono text-[10px] text-gray-400">{tx.hash}</span>
-                  </td>
-                  <td className={`px-6 py-4 text-right font-medium ${tx.type === 'Credit' ? 'text-trust-green' : 'text-gray-800 dark:text-gray-200'}`}>
-                    {privacyMode ? <span className="blur-sm select-none text-xs text-gray-400">ENCRYPTED</span> : (
-                      <>
-                        {tx.type === 'Debit' ? '-' : '+'}€{tx.amount}
-                      </>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </GlassCard>
-    </>
-  )
-}
-          </main >
-
-  {/* Floating Chat Buttons */ }
-  < div className = "fixed bottom-6 right-6 flex flex-col gap-3 z-40" >
-
-    {/* Support Chat Button */ }
-    < button
-onClick = {() => {
-  setIsSupportOpen(!isSupportOpen);
-  setIsChatOpen(false); // Close AI chat if open
-}}
-className = "w-14 h-14 bg-trust-blue text-white rounded-full shadow-lg hover:bg-opacity-90 transition-transform hover:scale-105 flex items-center justify-center relative group"
-title = "Contact Support"
-  >
-  <div className="absolute inset-0 bg-trust-blue rounded-full animate-ping opacity-20"></div>
-{
-  unreadSupportCount > 0 && (
-    <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-[10px] flex items-center justify-center rounded-full font-bold border-2 border-white dark:border-trust-darkbg z-10">
-      {unreadSupportCount}
-    </span>
-  )
-}
-<MessageSquare size={24} />
-{/* Tooltip */ }
-<div className="absolute right-full mr-3 top-1/2 -translate-y-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-  Admin Support
-</div>
         </button >
 
-  {/* AI Chat Button */ }
-  < button
-onClick = {() => {
-  setIsChatOpen(!isChatOpen);
-  setIsSupportOpen(false); // Close Support chat if open
-}}
-className = "w-14 h-14 bg-white dark:bg-trust-darkcard text-trust-blue dark:text-white rounded-full shadow-lg border border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-transform hover:scale-105 flex items-center justify-center group"
-title = "AI Assistant"
-  >
-  <Sparkles size={24} />
-{/* Tooltip */ }
-<div className="absolute right-full mr-3 top-1/2 -translate-y-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-  AI Assistant
-</div>
+        {/* AI Chat Button */}
+        < button
+          onClick={() => {
+            setIsChatOpen(!isChatOpen);
+            setIsSupportOpen(false); // Close Support chat if open
+          }}
+          className="w-14 h-14 bg-white dark:bg-trust-darkcard text-trust-blue dark:text-white rounded-full shadow-lg border border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-transform hover:scale-105 flex items-center justify-center group"
+          title="AI Assistant"
+        >
+          <Sparkles size={24} />
+          {/* Tooltip */}
+          <div className="absolute right-full mr-3 top-1/2 -translate-y-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+            AI Assistant
+          </div>
         </button >
       </div >
 
-  {/* Interactive Detail Modal (General) */ }
-{
-  activeModal && (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-      <div
-        className="absolute inset-0 bg-trust-blue/30 backdrop-blur-sm transition-opacity"
-        onClick={() => setActiveModal(null)}
-      />
-      <div className="relative bg-white dark:bg-trust-darkcard w-full max-w-md rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
+      {/* Interactive Detail Modal (General) */}
+      {
+        activeModal && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <div
+              className="absolute inset-0 bg-trust-blue/30 backdrop-blur-sm transition-opacity"
+              onClick={() => setActiveModal(null)}
+            />
+            <div className="relative bg-white dark:bg-trust-darkcard w-full max-w-md rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
 
-        <div className="bg-trust-blue dark:bg-black/40 px-6 py-4 flex justify-between items-center text-white border-b border-white/10">
-          <div className="flex items-center gap-2">
-            {activeModal === 'OCCUPANCY' ? <Home size={18} /> : <Wallet size={18} />}
-            <span className="font-serif font-bold text-lg">
-              {activeModal === 'OCCUPANCY' ? 'Occupancy Portfolio' : 'Payout Breakdown'}
-            </span>
-          </div>
-          <button
-            onClick={() => setActiveModal(null)}
-            className="p-1 hover:bg-white/10 rounded-full transition-colors"
-          >
-            <X size={20} />
-          </button>
-        </div>
-
-        <div className="p-6">
-          {activeModal === 'OCCUPANCY' ? (
-            <div className="space-y-6">
-              <div className="text-center">
-                <h3 className="text-4xl font-bold text-trust-blue dark:text-white">82%</h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Average Portfolio Occupancy</p>
+              <div className="bg-trust-blue dark:bg-black/40 px-6 py-4 flex justify-between items-center text-white border-b border-white/10">
+                <div className="flex items-center gap-2">
+                  {activeModal === 'OCCUPANCY' ? <Home size={18} /> : <Wallet size={18} />}
+                  <span className="font-serif font-bold text-lg">
+                    {activeModal === 'OCCUPANCY' ? 'Occupancy Portfolio' : 'Payout Breakdown'}
+                  </span>
+                </div>
+                <button
+                  onClick={() => setActiveModal(null)}
+                  className="p-1 hover:bg-white/10 rounded-full transition-colors"
+                >
+                  <X size={20} />
+                </button>
               </div>
-              <div className="space-y-4">
-                {MOCK_PROPERTIES.map(prop => (
-                  <div key={prop.id}>
-                    <div className="flex justify-between text-sm mb-1">
-                      <span className="font-medium text-gray-700 dark:text-gray-200">{prop.name}</span>
-                      <span className="font-bold text-trust-blue dark:text-white">{prop.occupancyRate}%</span>
+
+              <div className="p-6">
+                {activeModal === 'OCCUPANCY' ? (
+                  <div className="space-y-6">
+                    <div className="text-center">
+                      <h3 className="text-4xl font-bold text-trust-blue dark:text-white">82%</h3>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">Average Portfolio Occupancy</p>
                     </div>
-                    <div className="h-2 w-full bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
-                      <div
-                        className={`h-full rounded-full ${prop.occupancyRate > 80 ? 'bg-green-500' : prop.occupancyRate > 50 ? 'bg-orange-400' : 'bg-red-400'}`}
-                        style={{ width: `${prop.occupancyRate}%` }}
-                      ></div>
+                    <div className="space-y-4">
+                      {MOCK_PROPERTIES.map(prop => (
+                        <div key={prop.id}>
+                          <div className="flex justify-between text-sm mb-1">
+                            <span className="font-medium text-gray-700 dark:text-gray-200">{prop.name}</span>
+                            <span className="font-bold text-trust-blue dark:text-white">{prop.occupancyRate}%</span>
+                          </div>
+                          <div className="h-2 w-full bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
+                            <div
+                              className={`h-full rounded-full ${prop.occupancyRate > 80 ? 'bg-green-500' : prop.occupancyRate > 50 ? 'bg-orange-400' : 'bg-red-400'}`}
+                              style={{ width: `${prop.occupancyRate}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
-                ))}
+                ) : (
+                  <div className="space-y-6">
+                    <div className="bg-trust-gray dark:bg-gray-800 p-4 rounded-xl flex items-center justify-between">
+                      <div>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 uppercase font-semibold">Net Transfer</p>
+                        <h3 className="text-2xl font-bold text-trust-blue dark:text-white">{renderFinancialValue('€2,450.00')}</h3>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-xs text-gray-500 dark:text-gray-400">Est. Date</p>
+                        <p className="text-sm font-bold text-trust-blue dark:text-white">Aug 15, 2024</p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-3">
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-600 dark:text-gray-400">Gross Bookings (July)</span>
+                        <span className="font-medium text-gray-900 dark:text-white">{renderFinancialValue('€3,200.00')}</span>
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-600 dark:text-gray-400">Cleaning Fees Collected</span>
+                        <span className="font-medium text-green-600">{renderFinancialValue('+€450.00')}</span>
+                      </div>
+                      <div className="border-t border-gray-100 dark:border-gray-700 my-2"></div>
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-600 dark:text-gray-400">TrustBnB Commission (20%)</span>
+                        <span className="font-medium text-red-500">{renderFinancialValue('-€730.00')}</span>
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-600 dark:text-gray-400">VAT & Tourism Tax</span>
+                        <span className="font-medium text-red-500">{renderFinancialValue('-€470.00')}</span>
+                      </div>
+                    </div>
+
+                    <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg flex gap-3 items-start">
+                      <CreditCard size={16} className="text-trust-blue dark:text-blue-300 mt-0.5" />
+                      <p className="text-xs text-trust-blue dark:text-blue-200">
+                        Transfer initiated to <strong>UBS Account (...8921)</strong>. Funds typically arrive within 2 business days.
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
-          ) : (
-            <div className="space-y-6">
-              <div className="bg-trust-gray dark:bg-gray-800 p-4 rounded-xl flex items-center justify-between">
-                <div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 uppercase font-semibold">Net Transfer</p>
-                  <h3 className="text-2xl font-bold text-trust-blue dark:text-white">{renderFinancialValue('€2,450.00')}</h3>
-                </div>
-                <div className="text-right">
-                  <p className="text-xs text-gray-500 dark:text-gray-400">Est. Date</p>
-                  <p className="text-sm font-bold text-trust-blue dark:text-white">Aug 15, 2024</p>
-                </div>
-              </div>
+          </div>
+        )
+      }
 
-              <div className="space-y-3">
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600 dark:text-gray-400">Gross Bookings (July)</span>
-                  <span className="font-medium text-gray-900 dark:text-white">{renderFinancialValue('€3,200.00')}</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600 dark:text-gray-400">Cleaning Fees Collected</span>
-                  <span className="font-medium text-green-600">{renderFinancialValue('+€450.00')}</span>
-                </div>
-                <div className="border-t border-gray-100 dark:border-gray-700 my-2"></div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600 dark:text-gray-400">TrustBnB Commission (20%)</span>
-                  <span className="font-medium text-red-500">{renderFinancialValue('-€730.00')}</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600 dark:text-gray-400">VAT & Tourism Tax</span>
-                  <span className="font-medium text-red-500">{renderFinancialValue('-€470.00')}</span>
-                </div>
-              </div>
+      {/* Property Calendar Modal */}
+      {
+        calendarProperty && (
+          <PropertyFullCalendarModal
+            property={calendarProperty}
+            onClose={() => setCalendarProperty(null)}
+          />
+        )
+      }
 
-              <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg flex gap-3 items-start">
-                <CreditCard size={16} className="text-trust-blue dark:text-blue-300 mt-0.5" />
-                <p className="text-xs text-trust-blue dark:text-blue-200">
-                  Transfer initiated to <strong>UBS Account (...8921)</strong>. Funds typically arrive within 2 business days.
-                </p>
-              </div>
-            </div>
-          )}
+      {/* Footer */}
+      <footer className="bg-white dark:bg-trust-darkcard border-t border-gray-200 dark:border-gray-700 py-6 mt-12 text-center text-xs text-gray-400">
+        <p>&copy; 2024 TrustBnB Inc. Swiss-Albanian Property Management.</p>
+        <div className="mt-2 space-x-4">
+          <button onClick={() => setFooterModalType('PRIVACY')} className="hover:text-trust-blue dark:hover:text-white">Privacy</button>
+          <button onClick={() => setFooterModalType('TERMS')} className="hover:text-trust-blue dark:hover:text-white">Terms</button>
+          <button onClick={() => setFooterModalType('CONTACT')} className="hover:text-trust-blue dark:hover:text-white">Support</button>
         </div>
-      </div>
-    </div>
-  )
-}
+      </footer>
 
-{/* Property Calendar Modal */ }
-{
-  calendarProperty && (
-    <PropertyFullCalendarModal
-      property={calendarProperty}
-      onClose={() => setCalendarProperty(null)}
-    />
-  )
-}
+      {/* AI Chat Widget */}
+      <AIChat isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} contextData={aiContext} />
 
-{/* Footer */ }
-<footer className="bg-white dark:bg-trust-darkcard border-t border-gray-200 dark:border-gray-700 py-6 mt-12 text-center text-xs text-gray-400">
-  <p>&copy; 2024 TrustBnB Inc. Swiss-Albanian Property Management.</p>
-  <div className="mt-2 space-x-4">
-    <button onClick={() => setFooterModalType('PRIVACY')} className="hover:text-trust-blue dark:hover:text-white">Privacy</button>
-    <button onClick={() => setFooterModalType('TERMS')} className="hover:text-trust-blue dark:hover:text-white">Terms</button>
-    <button onClick={() => setFooterModalType('CONTACT')} className="hover:text-trust-blue dark:hover:text-white">Support</button>
-  </div>
-</footer>
+      {/* Support Chat Widget */}
+      <OwnerChatWidget
+        isOpen={isSupportOpen}
+        onClose={() => setIsSupportOpen(false)}
+        currentUser={currentUser}
+      />
 
-{/* AI Chat Widget */ }
-<AIChat isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} contextData={aiContext} />
+      <FooterInfoModal
+        type={footerModalType}
+        onClose={() => setFooterModalType(null)}
+      />
 
-{/* Support Chat Widget */ }
-        <OwnerChatWidget
-          isOpen={isSupportOpen}
-          onClose={() => setIsSupportOpen(false)}
-          currentUser={currentUser}
-        />
-
-        <FooterInfoModal
-          type={footerModalType}
-          onClose={() => setFooterModalType(null)}
-        />
-
-        <PropertyOnboardingModal
-          isOpen={isOnboardingOpen}
-          onClose={() => setIsOnboardingOpen(false)}
-          onComplete={(data) => {
-            addProperty(data);
-            setIsOnboardingOpen(false);
-          }}
-        />
+      <PropertyOnboardingModal
+        isOpen={isOnboardingOpen}
+        onClose={() => setIsOnboardingOpen(false)}
+        onComplete={(data) => {
+          addProperty(data);
+          setIsOnboardingOpen(false);
+        }}
+      />
     </div >
   );
 };
