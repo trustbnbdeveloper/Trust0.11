@@ -48,18 +48,29 @@ async function runMigrationsIfNeeded() {
   console.log('Debug: SUPABASE_DB_URL type:', typeof SUPABASE_DB_URL);
   console.log('Debug: SUPABASE_DB_URL length:', connectionString.length);
 
+  let client;
   try {
-    const u = new URL(connectionString);
-    console.log('Debug: URL protocol:', u.protocol);
-  } catch (e) {
-    console.error('Debug: Invalid URL format:', e.message);
-    // Don't throw yet, let Client try or fail, but this explains the error
+    client = new Client({
+      connectionString: connectionString,
+      ssl: { rejectUnauthorized: false } // Required for Supabase/Cloud connections
+    });
+  } catch (err) {
+    if (connectionString.includes(':?')) {
+      console.warn('Debug: Detected potential unencoded question mark in password. Attempting auto-fix...');
+      const fixedConnectionString = connectionString.replace(':?', ':%3F');
+      try {
+        client = new Client({
+          connectionString: fixedConnectionString,
+          ssl: { rejectUnauthorized: false }
+        });
+        console.log('Debug: Auto-fix successful. Client initialized.');
+      } catch (retryErr) {
+        throw err;
+      }
+    } else {
+      throw err;
+    }
   }
-
-  const client = new Client({
-    connectionString: connectionString,
-    ssl: { rejectUnauthorized: false } // Required for Supabase/Cloud connections
-  });
   try {
     await client.connect();
 
