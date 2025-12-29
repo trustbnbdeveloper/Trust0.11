@@ -8,7 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "deploy": "npx vite build --outDir outdist && npx wrangler pages deploy ./outdist --project-name trustbnb-ecosystem --branch main",
-    "deploy:worker": "npx wrangler publish",
+    "deploy:worker": "npx wrangler deploy",
     "dev:worker": "npx wrangler dev",
     "seed:supabase": "node ./scripts/seedSupabase.js"
   },
@@ -26,7 +26,6 @@
     "zod": "^4.2.1",
     "pg": "^8.10.0"
   },
-
   "devDependencies": {
     "@types/node": "^22.14.0",
     "@vitejs/plugin-react": "^5.0.0",
