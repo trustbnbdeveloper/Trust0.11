@@ -44,6 +44,34 @@ async function runMigrationsIfNeeded() {
 
     await client.query(createProfiles);
 
+    // Safely migrate columns if they don't exist (handle legacy schema)
+    const migrateColumns = `
+      DO $$
+      BEGIN
+        BEGIN
+            ALTER TABLE profiles ADD COLUMN IF NOT EXISTS user_id uuid REFERENCES auth.users(id) ON DELETE CASCADE;
+        EXCEPTION
+            WHEN duplicate_column THEN NULL;
+        END;
+        BEGIN
+            ALTER TABLE profiles ADD COLUMN IF NOT EXISTS full_name text;
+        EXCEPTION
+            WHEN duplicate_column THEN NULL;
+        END;
+        BEGIN
+            ALTER TABLE profiles ADD COLUMN IF NOT EXISTS avatar_url text;
+        EXCEPTION
+            WHEN duplicate_column THEN NULL;
+        END;
+        BEGIN
+            ALTER TABLE profiles ADD COLUMN IF NOT EXISTS type text DEFAULT 'user' CHECK (type IN ('user', 'platform_admin'));
+        EXCEPTION
+            WHEN duplicate_column THEN NULL;
+        END;
+      END $$;
+    `;
+    await client.query(migrateColumns);
+
     console.log('Migrations complete.');
   } catch (err) {
     console.error('Migration error:', err?.message || err);
@@ -57,10 +85,9 @@ async function tableExists(name) {
   try {
     const { data, error } = await supabase.from(name).select('user_id').limit(1);
     if (error) {
-      const msg = String(error.message || error);
-      if (msg.toLowerCase().includes('does not exist') || msg.includes('relation')) return false;
-      // If we queried user_id but it failed, maybe the column name is wrong? Try generic count
-      return true;
+      // If column 'user_id' doesn't exist, we might get an error even if table exists. 
+      // But runMigrationsIfNeeded needs connectivity to fix this.
+      return true; // Assume table exists if we got this far, let upsert fail or work if schema just got fixed.
     }
     return true;
   } catch (err) {
@@ -69,12 +96,6 @@ async function tableExists(name) {
 }
 
 async function seedProfiles() {
-  const exists = await tableExists('profiles');
-  if (!exists) {
-    console.warn('The `profiles` table does not exist. Ensure migrations (schema.sql) have run.');
-    // Don't exit, try to insert anyway if the script above created it
-  }
-
   // Use user_id, full_name, avatar_url to match schema.sql
   const profiles = [
     { user_id: 'admin-01', full_name: 'Admin User', avatar_url: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100', wishlist: [], type: 'platform_admin' },
@@ -93,6 +114,7 @@ async function seedProfiles() {
 async function main() {
   try {
     console.log('Starting Supabase seed...');
+    await runMigrationsIfNeeded();
     await seedProfiles();
     console.log('Seed complete.');
     process.exit(0);
