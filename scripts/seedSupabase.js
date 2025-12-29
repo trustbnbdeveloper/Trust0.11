@@ -124,6 +124,16 @@ async function runMigrationsIfNeeded() {
       console.warn('\nDebug: Primary connection failed with network error. Detected Supabase URL.');
       console.warn('Debug: Attempting to auto-discover IPv4 Connection Pooler (Supavisor) to bypass IPv6-only restriction...');
 
+      // Extract project ref from the original host (db.xyz.supabase.co)
+      // We need this because Supavisor often requires 'user.projectref' as the username.
+      const originalHost = clientConfig.host || '';
+      const projectRefMatch = originalHost.match(/^db\.([a-z0-9]+)\.supabase\.co$/);
+      const projectRef = projectRefMatch ? projectRefMatch[1] : null;
+
+      if (projectRef) {
+        console.log(`Debug: Extracted Project Reference: ${projectRef}`);
+      }
+
       const regions = [
         'eu-central-1', 'us-east-1', 'us-west-1', 'us-west-2', 'eu-west-1', 'eu-west-2', 'eu-west-3',
         'ap-southeast-1', 'ap-southeast-2', 'ap-northeast-1', 'ap-northeast-2', 'sa-east-1', 'ca-central-1', 'ap-south-1'
@@ -143,17 +153,31 @@ async function runMigrationsIfNeeded() {
           // If it resolves, try to connect
           console.log(`Debug: Probing pooler: ${poolerHost} (Port 6543)...`);
 
-          // Try Transaction Mode port (6543) which is most reliable on poolers
-          const poolerConfig = { ...clientConfig, host: poolerHost, port: 6543 };
+          // Construct pooler config
+          // CRITICAL: Username must be 'user.projectref' for Supavisor
+          const poolerUser = (projectRef && clientConfig.user && !clientConfig.user.includes('.'))
+            ? `${clientConfig.user}.${projectRef}`
+            : clientConfig.user;
+
+          const poolerConfig = {
+            ...clientConfig,
+            host: poolerHost,
+            port: 6543,
+            user: poolerUser
+          };
+
           const probeClient = new Client(poolerConfig);
 
           await probeClient.connect();
-          console.log(`Debug: SUCCESS! Connected via ${poolerHost}`);
+          console.log(`Debug: SUCCESS! Connected via ${poolerHost} as ${poolerUser}`);
           workingClient = probeClient;
           break; // Found it!
         } catch (probeErr) {
-          // Ignore DNS errors (region doesn't match) or Auth errors (wrong region/host for this user)
-          // console.log(`Probe failed for ${region}: ${probeErr.message}`);
+          // Log auth errors specifically to help debug
+          const msg = probeErr.message;
+          if (!msg.includes('ENOTFOUND') && !msg.includes('EAI_AGAIN')) {
+            console.log(`Debug: Probe failed for ${region}: ${msg}`);
+          }
           if (workingClient) break;
         }
       }
