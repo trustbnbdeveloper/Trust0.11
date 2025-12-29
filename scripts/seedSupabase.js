@@ -29,8 +29,20 @@ async function runMigrationsIfNeeded() {
   const pgImport = await import('pg');
   const { Client } = pgImport.default || pgImport;
 
+  const connectionString = String(SUPABASE_DB_URL || '').trim();
+  console.log('Debug: SUPABASE_DB_URL type:', typeof SUPABASE_DB_URL);
+  console.log('Debug: SUPABASE_DB_URL length:', connectionString.length);
+
+  try {
+    const u = new URL(connectionString);
+    console.log('Debug: URL protocol:', u.protocol);
+  } catch (e) {
+    console.error('Debug: Invalid URL format:', e.message);
+    // Don't throw yet, let Client try or fail, but this explains the error
+  }
+
   const client = new Client({
-    connectionString: SUPABASE_DB_URL.trim(),
+    connectionString: connectionString,
     ssl: { rejectUnauthorized: false } // Required for Supabase/Cloud connections
   });
   try {
