@@ -29,7 +29,22 @@ async function runMigrationsIfNeeded() {
   const pgImport = await import('pg');
   const { Client } = pgImport.default || pgImport;
 
-  const connectionString = String(SUPABASE_DB_URL || '').trim();
+  let connectionString = String(SUPABASE_DB_URL || '').trim();
+
+  // Handle common copy-paste errors (surrounding quotes)
+  if ((connectionString.startsWith('"') && connectionString.endsWith('"')) ||
+    (connectionString.startsWith("'") && connectionString.endsWith("'"))) {
+    connectionString = connectionString.slice(1, -1);
+  }
+
+  // Ensure protocol is present
+  if (!connectionString.startsWith('postgres://') && !connectionString.startsWith('postgresql://')) {
+    console.log('Debug: Missing protocol, prepending postgresql://');
+    connectionString = 'postgresql://' + connectionString;
+  }
+
+  console.log('Debug: Final connectionString start:', connectionString.substring(0, 15) + '...');
+
   console.log('Debug: SUPABASE_DB_URL type:', typeof SUPABASE_DB_URL);
   console.log('Debug: SUPABASE_DB_URL length:', connectionString.length);
 
