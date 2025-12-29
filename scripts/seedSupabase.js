@@ -22,50 +22,72 @@ async function runMigrationsIfNeeded() {
     return;
   }
 
-  // Run migrations via pg client (using service role or DB URL directly)
   console.log('SUPABASE_DB_URL found; running automatic DDL migrations...');
 
   // Robust import for pg (handles ESM/CJS interop nuances in different envs)
   const pgImport = await import('pg');
   const { Client } = pgImport.default || pgImport;
 
-  let connectionString = String(SUPABASE_DB_URL || '').trim();
-
-  // Handle common copy-paste errors (surrounding quotes)
-  if ((connectionString.startsWith('"') && connectionString.endsWith('"')) ||
-    (connectionString.startsWith("'") && connectionString.endsWith("'"))) {
-    connectionString = connectionString.slice(1, -1);
+  let dbUrl = String(SUPABASE_DB_URL || '').trim();
+  // Strip quotes
+  if ((dbUrl.startsWith('"') && dbUrl.endsWith('"')) || (dbUrl.startsWith("'") && dbUrl.endsWith("'"))) {
+    dbUrl = dbUrl.slice(1, -1);
   }
 
-  // Ensure protocol is present
-  if (!connectionString.startsWith('postgres://') && !connectionString.startsWith('postgresql://')) {
-    console.log('Debug: Missing protocol, prepending postgresql://');
-    connectionString = 'postgresql://' + connectionString;
+  // Ensure protocol for parsing (and if we fall back)
+  if (!dbUrl.startsWith('postgres://') && !dbUrl.startsWith('postgresql://')) {
+    dbUrl = 'postgresql://' + dbUrl;
   }
 
-  // Auto-fix unencoded '?' in password (common issue with generated passwords)
-  // The sequence ':?' inside the authority selection implies 'user:?password'
-  // We encode it to ':%3F' so the parser doesn't treat it as query params start.
-  if (connectionString.includes(':?')) {
-    console.log('Debug: Escaping unencoded question mark in password.');
-    connectionString = connectionString.replace(':?', ':%3F');
-  }
+  let clientConfig = {
+    ssl: { rejectUnauthorized: false }
+  };
 
-  console.log('Debug: Final connectionString start:', connectionString.substring(0, 15) + '...');
-
-  console.log('Debug: SUPABASE_DB_URL type:', typeof SUPABASE_DB_URL);
-  console.log('Debug: SUPABASE_DB_URL length:', connectionString.length);
-
-  let client;
+  // Manual parsing to bypass pg-connection-string issues with special chars (like '?' in password)
   try {
-    client = new Client({
-      connectionString: connectionString,
-      ssl: { rejectUnauthorized: false } // Required for Supabase/Cloud connections
-    });
-  } catch (err) {
-    console.error('Debug: Client initialization failed:', err.message);
-    throw err;
+    const protocolRegex = /^(?:postgres|postgresql):\/\//;
+    const noProtocol = dbUrl.replace(protocolRegex, '');
+    const lastAt = noProtocol.lastIndexOf('@');
+
+    if (lastAt !== -1) {
+      const auth = noProtocol.substring(0, lastAt);
+      const rest = noProtocol.substring(lastAt + 1);
+
+      const firstColon = auth.indexOf(':');
+      if (firstColon !== -1) {
+        clientConfig.user = auth.substring(0, firstColon);
+        clientConfig.password = auth.substring(firstColon + 1); // Exact raw password
+
+        const slashIndex = rest.indexOf('/');
+        const hostPort = slashIndex !== -1 ? rest.substring(0, slashIndex) : rest;
+        clientConfig.database = slashIndex !== -1 ? rest.substring(slashIndex + 1).split('?')[0] : 'postgres';
+
+        const colonIndex = hostPort.lastIndexOf(':');
+        if (colonIndex !== -1) {
+          clientConfig.host = hostPort.substring(0, colonIndex);
+          clientConfig.port = parseInt(hostPort.substring(colonIndex + 1));
+        } else {
+          clientConfig.host = hostPort;
+          clientConfig.port = 5432;
+        }
+        console.log('Debug: Manual parsing successful. Host:', clientConfig.host);
+      }
+    }
+  } catch (parseErr) {
+    console.warn('Debug: Manual parsing failed:', parseErr.message);
   }
+
+  // Fallback if manual parsing didn't find a user
+  if (!clientConfig.user) {
+    console.log('Debug: Falling back to connectionString.');
+    // Try the fix we attempted before, just in case
+    if (dbUrl.includes(':?')) {
+      dbUrl = dbUrl.replace(':?', ':%3F');
+    }
+    clientConfig.connectionString = dbUrl;
+  }
+
+  const client = new Client(clientConfig);
   try {
     await client.connect();
 
