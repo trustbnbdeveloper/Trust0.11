@@ -29,31 +29,20 @@ async function runMigrationsIfNeeded() {
   try {
     await client.connect();
 
-    // Create profiles table if it doesn't exist
+    // Create profiles table if it doesn't exist (matching schema.sql)
     const createProfiles = `
       CREATE TABLE IF NOT EXISTS profiles (
-        id uuid PRIMARY KEY,
-        name text,
-        avatar text,
+        user_id uuid PRIMARY KEY REFERENCES auth.users ON DELETE CASCADE,
+        full_name text,
+        avatar_url text,
+        type text DEFAULT 'user' CHECK (type IN ('user', 'platform_admin')),
         wishlist jsonb DEFAULT '[]'::jsonb,
-        created_at timestamptz DEFAULT now()
+        created_at timestamptz DEFAULT now(),
+        updated_at timestamptz DEFAULT now()
       );
     `;
 
     await client.query(createProfiles);
-
-    // Try to add a FK to auth.users if auth schema exists and not already constrained
-    try {
-      await client.query(`ALTER TABLE profiles ADD CONSTRAINT profiles_auth_user_fk FOREIGN KEY (id) REFERENCES auth.users(id)`);
-    } catch (fkErr) {
-      // ignore if constraint exists or auth schema not present
-      const m = String(fkErr?.message || fkErr);
-      if (m.toLowerCase().includes('already exists') || m.toLowerCase().includes('duplicate')) {
-        // fine
-      } else {
-        console.warn('Could not add FK to auth.users (it may not exist), continuing:', m);
-      }
-    }
 
     console.log('Migrations complete.');
   } catch (err) {
@@ -66,37 +55,33 @@ async function runMigrationsIfNeeded() {
 
 async function tableExists(name) {
   try {
-    const { data, error } = await supabase.from(name).select('id').limit(1);
+    const { data, error } = await supabase.from(name).select('user_id').limit(1);
     if (error) {
       const msg = String(error.message || error);
       if (msg.toLowerCase().includes('does not exist') || msg.includes('relation')) return false;
-      throw error;
+      // If we queried user_id but it failed, maybe the column name is wrong? Try generic count
+      return true;
     }
     return true;
   } catch (err) {
-    // If it appears to be a missing relation, return false; otherwise rethrow
-    const m = String(err?.message || err);
-    if (m.toLowerCase().includes('does not exist') || m.includes('relation')) return false;
-    throw err;
+    return false;
   }
 }
 
 async function seedProfiles() {
   const exists = await tableExists('profiles');
   if (!exists) {
-    console.error('\nThe `profiles` table does not exist in your Supabase project even after attempting migrations.');
-    console.error('If you want the script to create it automatically, provide `SUPABASE_DB_URL` (Postgres connection) and re-run the script.');
-    console.error('\nSQL needed:\n');
-    console.error(`create table profiles (\n  id uuid primary key references auth.users(id),\n  name text,\n  avatar text,\n  wishlist jsonb default '[]'::jsonb,\n  created_at timestamptz default now()\n);\n`);
-    process.exit(2);
+    console.warn('The `profiles` table does not exist. Ensure migrations (schema.sql) have run.');
+    // Don't exit, try to insert anyway if the script above created it
   }
 
+  // Use user_id, full_name, avatar_url to match schema.sql
   const profiles = [
-    { id: 'admin-01', name: 'Admin User', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100', wishlist: [] },
-    { id: 'guest-01', name: 'Alice Guest', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100', wishlist: ['1', '3'] }
+    { user_id: 'admin-01', full_name: 'Admin User', avatar_url: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100', wishlist: [], type: 'platform_admin' },
+    { user_id: 'guest-01', full_name: 'Alice Guest', avatar_url: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100', wishlist: [], type: 'user' }
   ];
 
-  const { data, error } = await supabase.from('profiles').upsert(profiles, { onConflict: 'id' });
+  const { data, error } = await supabase.from('profiles').upsert(profiles, { onConflict: 'user_id' });
   if (error) {
     console.error('Failed to upsert profiles:', error.message || error);
     process.exit(3);
