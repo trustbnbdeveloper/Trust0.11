@@ -13,6 +13,8 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      SEED_ON_PUSH: ${{ secrets.SEED_ON_PUSH }}
     steps:
       - uses: actions/checkout@v4
 
@@ -36,7 +38,7 @@ jobs:
         run: npm run deploy:worker
 
       - name: Run Supabase seed (optional)
-        if: ${{ (github.event_name == 'push' && secrets.SEED_ON_PUSH == 'true') || (github.event.inputs.run_seed == 'true') }}
+        if: ${{ (github.event_name == 'push' && env.SEED_ON_PUSH == 'true') || (github.event.inputs.run_seed == 'true') }}
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
