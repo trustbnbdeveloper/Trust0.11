@@ -43,6 +43,14 @@ async function runMigrationsIfNeeded() {
     connectionString = 'postgresql://' + connectionString;
   }
 
+  // Auto-fix unencoded '?' in password (common issue with generated passwords)
+  // The sequence ':?' inside the authority selection implies 'user:?password'
+  // We encode it to ':%3F' so the parser doesn't treat it as query params start.
+  if (connectionString.includes(':?')) {
+    console.log('Debug: Escaping unencoded question mark in password.');
+    connectionString = connectionString.replace(':?', ':%3F');
+  }
+
   console.log('Debug: Final connectionString start:', connectionString.substring(0, 15) + '...');
 
   console.log('Debug: SUPABASE_DB_URL type:', typeof SUPABASE_DB_URL);
@@ -55,21 +63,8 @@ async function runMigrationsIfNeeded() {
       ssl: { rejectUnauthorized: false } // Required for Supabase/Cloud connections
     });
   } catch (err) {
-    if (connectionString.includes(':?')) {
-      console.warn('Debug: Detected potential unencoded question mark in password. Attempting auto-fix...');
-      const fixedConnectionString = connectionString.replace(':?', ':%3F');
-      try {
-        client = new Client({
-          connectionString: fixedConnectionString,
-          ssl: { rejectUnauthorized: false }
-        });
-        console.log('Debug: Auto-fix successful. Client initialized.');
-      } catch (retryErr) {
-        throw err;
-      }
-    } else {
-      throw err;
-    }
+    console.error('Debug: Client initialization failed:', err.message);
+    throw err;
   }
   try {
     await client.connect();
