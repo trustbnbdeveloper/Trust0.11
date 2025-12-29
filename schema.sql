@@ -17,6 +17,16 @@ END $$;
 --     WHEN duplicate_object THEN null;
 -- END $$;
 
+-- 1a. DROP EXISTING OBJECTS (Clean slate for schema updates)
+DROP VIEW IF EXISTS booking_dates_only CASCADE;
+DROP TABLE IF EXISTS maintenance_tickets CASCADE;
+DROP TABLE IF EXISTS payments CASCADE;
+DROP TABLE IF EXISTS bookings CASCADE;
+DROP TABLE IF EXISTS property_owners CASCADE;
+DROP TABLE IF EXISTS tenant_users CASCADE;
+DROP TABLE IF EXISTS properties CASCADE;
+DROP TABLE IF EXISTS audit_logs CASCADE;
+
 -- 2. TENANTS (THE CORE)
 CREATE TABLE IF NOT EXISTS tenants (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -41,6 +51,24 @@ CREATE TABLE IF NOT EXISTS profiles (
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- 4. PROPERTIES (must be created before property_owners)
+CREATE TABLE IF NOT EXISTS properties (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    owner_id UUID NOT NULL REFERENCES profiles(user_id), -- Changed from profiles(id) to profiles(user_id)
+    name TEXT NOT NULL,
+    description TEXT,
+    location TEXT NOT NULL,
+    price_per_night DECIMAL(12,2) NOT NULL,
+    images TEXT[],
+    status TEXT DEFAULT 'Active',
+    metadata JSONB DEFAULT '{}',
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 5. JOIN TABLES (MANY-TO-MANY)
+
 -- TENANT_USERS: Relationship between users and tenants (agencies).
 -- Allows a user to be staff in one tenant and an admin in another.
 CREATE TABLE IF NOT EXISTS tenant_users (
@@ -59,23 +87,7 @@ CREATE TABLE IF NOT EXISTS property_owners (
     PRIMARY KEY (property_id, user_id)
 );
 
--- 4. PROPERTIES
-CREATE TABLE IF NOT EXISTS properties (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
-    owner_id UUID NOT NULL REFERENCES profiles(user_id), -- Changed from profiles(id) to profiles(user_id)
-    name TEXT NOT NULL,
-    description TEXT,
-    location TEXT NOT NULL,
-    price_per_night DECIMAL(12,2) NOT NULL,
-    images TEXT[],
-    status TEXT DEFAULT 'Active',
-    metadata JSONB DEFAULT '{}',
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- 4. BOOKINGS & GUEST ACCESS
+-- 6. BOOKINGS & GUEST ACCESS
 
 -- BOOKINGS: Linked to both property and the specific tenant (reseller/manager).
 CREATE TABLE IF NOT EXISTS bookings (
@@ -94,7 +106,7 @@ CREATE TABLE IF NOT EXISTS bookings (
     CONSTRAINT check_dates CHECK (check_out > check_in)
 );
 
--- SECURE OPERATIONAL VIEW: Restricted access to booking dates without guest info.
+-- Create the view after the table exists
 CREATE OR REPLACE VIEW booking_dates_only AS
 SELECT id, property_id, tenant_id, check_in, check_out 
 FROM bookings;
