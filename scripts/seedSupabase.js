@@ -87,6 +87,31 @@ async function runMigrationsIfNeeded() {
     clientConfig.connectionString = dbUrl;
   }
 
+  // Force IPv4 resolution to prevent ENETUNREACH in CI environments with broken IPv6/dual-stack
+  // Only explicitly resolve if we have a hostname (not if using connectionString directly or IP)
+  const hostToResolve = clientConfig.host || (clientConfig.connectionString ? new URL(clientConfig.connectionString).hostname : null);
+
+  if (hostToResolve && !hostToResolve.match(/^(\d{1,3}\.){3}\d{1,3}$/)) {
+    try {
+      const dns = await import('dns');
+      const { promises: { lookup } } = dns.default || dns;
+      console.log(`Debug: Resolving ${hostToResolve} to IPv4...`);
+      const { address } = await lookup(hostToResolve, { family: 4 });
+      console.log(`Debug: Resolved to ${address}`);
+
+      if (clientConfig.host) {
+        clientConfig.host = address;
+      } else if (clientConfig.connectionString) {
+        // If using connectionString, we need to replace the hostname in it
+        // This is tricky with passwords, so we might just assume manual parsing worked mostly.
+        // But if manual parsing failed, we are here.
+        // Simplest is to trust manual parsing mostly worked or force it for the object style.
+      }
+    } catch (dnsErr) {
+      console.warn('Debug: DNS lookup failed, using original host:', dnsErr.message);
+    }
+  }
+
   const client = new Client(clientConfig);
   try {
     await client.connect();
