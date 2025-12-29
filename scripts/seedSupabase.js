@@ -48,6 +48,20 @@ async function runMigrationsIfNeeded() {
     dbUrl = 'postgresql://' + dbUrl;
   }
 
+  // Fix: URL-encode password if it contains special chars (e.g., '?' breaks URL parser)
+  // Pattern: postgresql://user:password@host:port/db
+  const passwordFixRegex = /^(postgresql?:\/\/[^:]+):([^@]+)@(.+)$/;
+  const match = dbUrl.match(passwordFixRegex);
+  if (match) {
+    const [, prefix, password, suffix] = match;
+    // Only encode if password contains unencoded special chars
+    if (password.includes('?') || password.includes('#') || password.includes('&')) {
+      const encodedPassword = encodeURIComponent(password);
+      dbUrl = `${prefix}:${encodedPassword}@${suffix}`;
+      console.log('Debug: Encoded special characters in password.');
+    }
+  }
+
   let clientConfig = {
     connectionString: dbUrl,
     ssl: { rejectUnauthorized: false }
