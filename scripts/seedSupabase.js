@@ -24,8 +24,15 @@ async function runMigrationsIfNeeded() {
 
   // Run migrations via pg client (using service role or DB URL directly)
   console.log('SUPABASE_DB_URL found; running automatic DDL migrations...');
-  const { Client } = await import('pg');
-  const client = new Client({ connectionString: SUPABASE_DB_URL });
+
+  // Robust import for pg (handles ESM/CJS interop nuances in different envs)
+  const pgImport = await import('pg');
+  const { Client } = pgImport.default || pgImport;
+
+  const client = new Client({
+    connectionString: SUPABASE_DB_URL.trim(),
+    ssl: { rejectUnauthorized: false } // Required for Supabase/Cloud connections
+  });
   try {
     await client.connect();
 
