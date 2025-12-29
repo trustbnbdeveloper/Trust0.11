@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Shield, BarChart3, Heart, Globe, ArrowRight, CheckCircle2, Moon, Sun, User, Diamond, Key, X, Map, Layout, Smartphone, Lock, Wallet, FileCheck, Menu } from 'lucide-react';
+import { Shield, BarChart3, Heart, Globe, ArrowRight, CheckCircle2, Moon, Sun, User, Diamond, Key, X, Map, Layout, Smartphone, Lock, Wallet, FileCheck, Menu, MapPin } from 'lucide-react';
 import { useAppContext } from '../contexts/AppContext';
 import { useAuth } from '../contexts/AuthContext';
 import { Language } from '../types';
@@ -9,7 +9,9 @@ import { UserProfile } from './UserProfile';
 import { MOCK_PROPERTIES } from '../constants';
 import { FooterInfoModal, FooterModalType } from '../components/FooterInfoModal';
 import { AuthModal } from '../components/AuthModal';
-import { ChevronDown, User as UserIcon, LogOut } from 'lucide-react';
+import { ChevronDown, User as UserIcon, LogOut, ChevronLeft, ChevronRight } from 'lucide-react';
+import { TrustButton } from '../components/core/TrustButton';
+import { GlassCard } from '../components/core/GlassCard';
 
 interface LandingProps {
   onLogin: (role: 'OWNER' | 'ADMIN' | 'GUEST') => void;
@@ -136,33 +138,51 @@ const SERVICES_DATA: ServiceDetail[] = [
 ];
 
 const PropertyDisplayCard = ({ property, className = "" }: { property: typeof MOCK_PROPERTIES[0], className?: string }) => (
-  <div className={`bg-white dark:bg-trust-darkcard p-2 rounded-2xl shadow-2xl rotate-2 hover:rotate-0 transition-all ${className}`}>
-    <img
-      src={property.imgUrl}
-      alt={property.name}
-      className="rounded-xl w-full h-[400px] object-cover"
-    />
-    <div className="absolute -top-6 -right-6 bg-white dark:bg-trust-darkcard p-6 rounded-xl shadow-xl min-w-[240px] transition-colors duration-200 border border-gray-100 dark:border-gray-700 z-20">
-      <div className="flex gap-4 items-center mb-3">
-        <div className="w-10 h-10 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-trust-green">
-          <BarChart3 size={20} />
-        </div>
+  <GlassCard
+    variant="glass"
+    padding="none"
+    className={`relative group animate-in fade-in slide-in-from-right duration-700 ${className}`}
+  >
+    <div className="relative h-[400px] overflow-hidden">
+      <img
+        src={property.imgUrl}
+        alt={property.name}
+        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+      />
+      <div className="absolute top-4 right-4 bg-white/90 dark:bg-trust-darkbg/90 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold text-trust-blue dark:text-white border border-white/20">
+        Live Portfolio
+      </div>
+    </div>
+    <div className="p-8">
+      <div className="flex justify-between items-start mb-6">
         <div>
-          <p className="text-xs text-gray-500 dark:text-gray-400">Monthly Revenue</p>
-          <p className="text-lg font-bold text-trust-blue dark:text-white">€{property.monthlyRevenue.toLocaleString()}</p>
+          <h3 className="text-2xl font-serif font-bold text-trust-blue dark:text-white leading-tight">{property.name}</h3>
+          <p className="text-sm text-gray-500 flex items-center gap-1 mt-1">
+            <MapPin size={14} /> {property.location}
+          </p>
+        </div>
+        <div className="p-3 bg-trust-blue/5 dark:bg-white/5 rounded-xl text-trust-blue dark:text-white">
+          <BarChart3 size={24} />
         </div>
       </div>
-      <div className="w-full bg-gray-100 dark:bg-gray-700 h-1.5 rounded-full overflow-hidden">
+      <div className="flex justify-between items-end mb-6">
+        <div>
+          <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-widest font-bold mb-1">Monthly Revenue</p>
+          <p className="text-2xl font-bold text-trust-blue dark:text-white">€{property.monthlyRevenue.toLocaleString()}</p>
+        </div>
+        <div className="text-right">
+          <p className="text-xs text-gray-400 mb-1">Occupancy</p>
+          <p className="font-bold text-trust-green">{property.occupancyRate}%</p>
+        </div>
+      </div>
+      <div className="w-full bg-gray-100 dark:bg-gray-700 h-2 rounded-full overflow-hidden">
         <div
-          className="h-full bg-trust-green"
+          className="h-full bg-trust-green transition-all duration-1000"
           style={{ width: `${property.occupancyRate}%` }}
         />
       </div>
-      <p className="text-[10px] text-gray-400 mt-2 text-right">
-        {property.occupancyRate}% Occupancy • {property.name}
-      </p>
     </div>
-  </div>
+  </GlassCard>
 );
 
 export const Landing: React.FC<LandingProps> = ({ onLogin }) => {
@@ -222,11 +242,13 @@ export const Landing: React.FC<LandingProps> = ({ onLogin }) => {
 
   const NavButton = ({ page, label }: { page: PublicPage, label: string }) => (
     <button
-      onClick={() => { setCurrentPage(page); setCurrentView('HOME'); }} // Ensure HOME view when navigating public pages
+      onClick={() => { setCurrentPage(page); setCurrentView('HOME'); }}
       className={`transition-all duration-200 relative py-1 text-sm font-medium ${currentPage === page
         ? 'text-trust-blue dark:text-white'
         : 'text-gray-500 dark:text-gray-400 hover:text-trust-blue dark:hover:text-white'
         }`}
+      aria-current={currentPage === page ? 'page' : undefined}
+      aria-label={`Navigate to ${label}`}
     >
       {label}
       <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-trust-green rounded-full transform transition-transform duration-300 origin-left ${currentPage === page ? 'scale-x-100' : 'scale-x-0'
@@ -241,7 +263,12 @@ export const Landing: React.FC<LandingProps> = ({ onLogin }) => {
       {/* Navbar */}
       <nav className={`fixed w-full z-40 transition-all duration-300 ${isScrolled || currentView === 'PROFILE' ? 'bg-white/90 dark:bg-trust-darkbg/90 backdrop-blur-md shadow-sm py-4' : 'bg-transparent py-6'}`}>
         <div className="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
-          <div className="flex items-center gap-2 cursor-pointer group" onClick={() => { setCurrentPage('HOME'); setCurrentView('HOME'); window.scrollTo(0, 0); }}>
+          <div
+            className="flex items-center gap-2 cursor-pointer group"
+            onClick={() => { setCurrentPage('HOME'); setCurrentView('HOME'); window.scrollTo(0, 0); }}
+            role="banner"
+            aria-label="TrustBnB Home"
+          >
             <div className="w-10 h-10 bg-trust-blue dark:bg-trust-blue rounded-lg flex items-center justify-center text-white transition-transform group-hover:scale-105">
               <Diamond size={20} fill="currentColor" />
             </div>
@@ -488,18 +515,21 @@ export const Landing: React.FC<LandingProps> = ({ onLogin }) => {
                   {t('subtitle')}
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                  <button
+                  <TrustButton
                     onClick={() => { setCurrentPage('HOW_IT_WORKS'); setCurrentView('HOME'); window.scrollTo(0, 0); }}
-                    className="px-8 py-4 bg-trust-blue text-white rounded-lg font-medium text-lg hover:bg-[#081522] transition-colors flex items-center justify-center gap-2 shadow-lg hover:shadow-xl hover:-translate-y-1 transform"
+                    variant="primary"
+                    size="lg"
+                    rightIcon={<ArrowRight size={20} />}
                   >
-                    {t('cta_start')} <ArrowRight size={20} />
-                  </button>
-                  <button
+                    {t('cta_start')}
+                  </TrustButton>
+                  <TrustButton
                     onClick={() => { setCurrentPage('PROPERTIES'); setCurrentView('HOME'); window.scrollTo(0, 0); }}
-                    className="px-8 py-4 bg-white dark:bg-transparent dark:text-white border border-gray-200 dark:border-gray-600 text-trust-blue rounded-lg font-medium text-lg hover:bg-gray-50 dark:hover:bg-white/10 transition-colors"
+                    variant="outline"
+                    size="lg"
                   >
                     {t('nav_properties')}
-                  </button>
+                  </TrustButton>
                 </div>
 
                 <div className="pt-8 w-full max-w-full lg:max-w-xl overflow-hidden relative">
@@ -812,12 +842,43 @@ export const Landing: React.FC<LandingProps> = ({ onLogin }) => {
                 <selectedService.icon size={20} />
                 {selectedService.title}
               </div>
-              <button
-                onClick={() => setSelectedService(null)}
-                className="p-1 hover:bg-white/10 rounded-full transition-colors"
-              >
-                <X size={20} />
-              </button>
+              <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1 mr-4 bg-white/10 rounded-lg p-1">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      const currentIndex = SERVICES_DATA.findIndex(s => s.title === selectedService.title);
+                      const prevIndex = (currentIndex - 1 + SERVICES_DATA.length) % SERVICES_DATA.length;
+                      setSelectedService(SERVICES_DATA[prevIndex]);
+                    }}
+                    className="p-1.5 hover:bg-white/20 rounded-md transition-colors"
+                    title="Previous"
+                  >
+                    <ChevronLeft size={18} />
+                  </button>
+                  <span className="text-[10px] font-mono opacity-60 px-1">
+                    {SERVICES_DATA.findIndex(s => s.title === selectedService.title) + 1} / {SERVICES_DATA.length}
+                  </span>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      const currentIndex = SERVICES_DATA.findIndex(s => s.title === selectedService.title);
+                      const nextIndex = (currentIndex + 1) % SERVICES_DATA.length;
+                      setSelectedService(SERVICES_DATA[nextIndex]);
+                    }}
+                    className="p-1.5 hover:bg-white/20 rounded-md transition-colors"
+                    title="Next"
+                  >
+                    <ChevronRight size={18} />
+                  </button>
+                </div>
+                <button
+                  onClick={() => setSelectedService(null)}
+                  className="p-1 hover:bg-white/10 rounded-full transition-colors"
+                >
+                  <X size={20} />
+                </button>
+              </div>
             </div>
             <div className="p-8">
               <p className="text-lg font-medium text-trust-blue dark:text-white mb-4 leading-relaxed">

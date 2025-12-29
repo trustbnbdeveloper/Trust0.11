@@ -27,7 +27,6 @@ export const PropertyDirectory: React.FC = () => {
     const [viewMode, setViewMode] = useState<'grid' | 'map'>('grid');
     const [bookingProperty, setBookingProperty] = useState<typeof enhancedProperties[0] | null>(null);
 
-    // Enhance properties with directory data
     const enhancedProperties: (Property & {
         bedrooms: number;
         bathrooms: number;

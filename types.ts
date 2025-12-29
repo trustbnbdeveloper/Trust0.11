@@ -1,21 +1,21 @@
 export enum UserRole {
-  PUBLIC = 'PUBLIC',
-  OWNER = 'OWNER',
-  ADMIN = 'ADMIN',
-  HOST = 'HOST',
-  GUEST = 'GUEST'
+  TENANT_ADMIN = 'tenant_admin',
+  STAFF = 'staff',
+  OWNER = 'owner'
 }
+
+export type StaffType = 'cleaner' | 'property_manager' | 'maintenance' | 'support';
 
 export interface User {
   id: string;
   name: string;
   email: string;
-  role: UserRole;
+  type: UserRole; // Renamed from 'role' to 'type', and using UserRole
+  staffType?: StaffType;
   avatar?: string;
   phone?: string;
   joinDate: string;
   wishlist: string[]; // Array of Property IDs
-  isFirstBooking?: boolean;
 }
 
 export interface SeasonalRule {
@@ -186,7 +186,9 @@ export interface Guest {
 export interface Booking {
   id: string;
   propertyId: string;
-  guestId: string;
+  tenantId: string;
+  guestEmail?: string;
+  guestName?: string;
   checkIn: string;
   checkOut: string;
   guests: number;
@@ -196,10 +198,11 @@ export interface Booking {
   nightlyRate: number;
   cleaningFee: number;
   serviceFee: number;
-  status: 'Pending' | 'Confirmed' | 'Checked-in' | 'Checked-out' | 'Cancelled';
+  status: 'pending' | 'confirmed' | 'cancelled' | 'completed';
   paymentStatus: 'Pending' | 'Paid' | 'Refunded';
   specialRequests?: string;
   createdAt: string;
+  bookingCode?: string;
 }
 
 export interface PropertyReview {
@@ -243,6 +246,19 @@ export interface SecurityLog {
   ipAddress: string;
   hash: string;
   status: 'Verified' | 'Flagged';
+}
+
+export interface MaintenanceTicket {
+  id: string;
+  propertyId: string;
+  tenantId: string;
+  createdBy: string;
+  assignedTo: string;
+  title: string;
+  description: string;
+  status: 'open' | 'in_progress' | 'resolved' | 'closed';
+  priority: 'low' | 'medium' | 'high' | 'emergency';
+  createdAt: string;
 }
 
 export interface BlogPost {
@@ -309,5 +325,5 @@ export interface LocalGuideTrip {
   featured?: boolean;
 }
 
-export type Language = 'en' | 'sq' | 'it' | 'el' | 'mk' | 'es';
+export type Language = 'en' | 'sq' | 'it' | 'el' | 'mk' | 'es' | 'fr' | 'de' | 'tr' | 'sr' | 'hr' | 'bs' | 'bg' | 'ro' | 'hu' | 'pl' | 'sv' | 'no' | 'da' | 'fi' | 'et' | 'ka' | 'lv' | 'lt' | 'cs';
 export type Theme = 'light' | 'dark';

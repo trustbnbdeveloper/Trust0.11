@@ -1,0 +1,272 @@
+[
+    {
+        "language": "en",
+        "guest": "I want to see my booking for next week.",
+        "agent": "Sure. Please provide your Booking ID and the email used for the reservation. Once verified, I’ll show your booking details including check-in/out dates, property, and payment status."
+    },
+    {
+        "language": "al",
+        "guest": "Dua me pa rezervimin tim për javën tjetër.",
+        "agent": "Sigurt. Ju lutem ma jepni Booking ID dhe email-in që keni përdorë për rezervimin. Pasi ta konfirmojmë, do t’ju tregoj detajet e rezervimit: datat e check-in/check-out, prona dhe statusin e pagesës."
+    },
+    {
+        "language": "it",
+        "guest": "Voglio vedere la mia prenotazione per la prossima settimana.",
+        "agent": "Certamente. Per favore forniscimi il tuo ID di prenotazione e l’email utilizzata. Una volta verificato, ti mostrerò i dettagli della prenotazione, incluse date di check-in/out, proprietà e stato pagamento."
+    },
+    {
+        "language": "en",
+        "guest": "I want to cancel my booking.",
+        "agent": "I can help with that. According to your tenant’s policy, you may be eligible for a full or partial refund depending on how many days are left before check-in. Please provide your Booking ID so I can explain the process."
+    },
+    {
+        "language": "al",
+        "guest": "Dua me anulue rezervimin tim.",
+        "agent": "Mund t’ju ndihmoj me këtë. Sipas politikës së tenant-it, mund të keni të drejtë për rimbursim të plotë ose të pjesshëm, varësisht sa ditë kanë mbet para check-in. Ju lutem më jepni Booking ID për të filluar procesin."
+    },
+    {
+        "language": "it",
+        "guest": "Voglio cancellare la mia prenotazione.",
+        "agent": "Posso aiutarti. Secondo la politica del tuo tenant, potresti avere diritto a un rimborso totale o parziale a seconda dei giorni rimasti prima del check-in. Per favore forniscimi l’ID della prenotazione."
+    },
+    {
+        "language": "en",
+        "guest": "Can I change my check-in date?",
+        "agent": "Sure. Changes are allowed if made at least X days before check-in according to your tenant’s policy. Please provide your Booking ID and the new date you want."
+    },
+    {
+        "language": "al",
+        "guest": "Mund me ndryshue datën e check-in?",
+        "agent": "Sigurt. Ndryshimet lejohen nëse bëhen së paku X ditë para check-in, sipas politikës së tenant-it. Ju lutem ma jepni Booking ID dhe datën e re që doni."
+    },
+    {
+        "language": "it",
+        "guest": "Posso cambiare la data di check-in?",
+        "agent": "Certamente. Le modifiche sono consentite se effettuate almeno X giorni prima del check-in secondo la politica del tenant. Per favore forniscimi l’ID della prenotazione e la nuova data."
+    },
+    {
+        "language": "en",
+        "guest": "My payment failed, what can I do?",
+        "agent": "No worries. You can retry your payment using the same method, or add a new one. Please provide your Booking ID and I’ll guide you through the process."
+    },
+    {
+        "language": "al",
+        "guest": "Pagesa ime dështoi, çka mund me ba?",
+        "agent": "Mos u shqetësoni. Mund ta provoni përsëri me të njëjtën metodë ose të shtoni një metodë tjetër. Ju lutem ma jepni Booking ID dhe do t’ju udhëzoj hap pas hapi."
+    },
+    {
+        "language": "it",
+        "guest": "Il mio pagamento è fallito, cosa posso fare?",
+        "agent": "Non preoccuparti. Puoi riprovare il pagamento con lo stesso metodo o aggiungerne uno nuovo. Per favore forniscimi l'ID della prenotazione e ti guiderò passo passo."
+    },
+    {
+        "language": "en",
+        "guest": "I want to create a full account.",
+        "agent": "Great. Provide the Booking ID, your email, and choose a password. Once created, your existing booking will be linked, and you can log in directly next time."
+    },
+    {
+        "language": "al",
+        "guest": "Dua me krijue një llogari të plotë.",
+        "agent": "Shumë mirë. Më jepni Booking ID, email-in dhe krijoni një fjalëkalim. Pasi të krijohet, rezervimi juaj ekzistues do lidhet dhe mund të kyçeni direkt herën tjetër."
+    },
+    {
+        "language": "it",
+        "guest": "Voglio creare un account completo.",
+        "agent": "Perfetto. Forniscimi l'ID della prenotazione, la tua email e scegli una password. Una volta creato, la tua prenotazione esistente sarà collegata e potrai accedere direttamente la prossima volta."
+    },
+    {
+        "language": "en",
+        "guest": "I need help with my booking.",
+        "agent": "I can assist you here. If your issue requires further action, I’ll escalate it to your tenant’s support team or our platform support."
+    },
+    {
+        "language": "al",
+        "guest": "Kam nevojë për ndihmë me rezervimin tim.",
+        "agent": "Mund t’ju ndihmoj këtu. Nëse problemi kërkon veprime shtesë, do ta dërgoj te ekipi i tenant-it ose te suporti i platformës."
+    },
+    {
+        "language": "it",
+        "guest": "Ho bisogno di aiuto con la mia prenotazione.",
+        "agent": "Posso aiutarti qui. Se il problema richiede ulteriori azioni, lo inoltrerò al team di supporto del tenant o al supporto della piattaforma."
+    },
+    {
+        "language": "en",
+        "guest": "I entered the wrong Booking ID.",
+        "agent": "It seems the Booking ID you provided is not valid. Please double-check it and provide the correct Booking ID associated with your email."
+    },
+    {
+        "language": "al",
+        "guest": "Kam shkrujt Booking ID gabim.",
+        "agent": "Duket që Booking ID që keni dhënë nuk është i saktë. Ju lutem kontrolloni dhe jepni Booking ID të saktë që lidhet me email-in tuaj."
+    },
+    {
+        "language": "it",
+        "guest": "Ho inserito il codice di prenotazione sbagliato.",
+        "agent": "Sembra che l'ID di prenotazione fornito non sia valido. Controlla e inserisci l'ID corretto associato alla tua email."
+    },
+    {
+        "language": "en",
+        "guest": "I want to know the check-in instructions.",
+        "agent": "Sure. Once you provide your Booking ID, I’ll show you the check-in instructions, property rules, and any access codes required."
+    },
+    {
+        "language": "al",
+        "guest": "Dua me ditë udhëzimet e check-in.",
+        "agent": "Sigurt. Pasi të jepni Booking ID, do t’ju tregoj udhëzimet e check-in, rregullat e pronës dhe çdo kod akses i nevojshëm."
+    },
+    {
+        "language": "it",
+        "guest": "Voglio sapere le istruzioni per il check-in.",
+        "agent": "Certamente. Una volta fornito l'ID della prenotazione, ti mostrerò le istruzioni per il check-in, le regole della proprietà e eventuali codici di accesso necessari."
+    },
+    {
+        "language": "en",
+        "guest": "Can I cancel after the allowed period?",
+        "agent": "Unfortunately, your booking is past the cancellation period. You may contact tenant support to check if any exceptions apply."
+    },
+    {
+        "language": "al",
+        "guest": "Mund me anulue pas periudhës së lejueshme?",
+        "agent": "Fatkeqësisht, rezervimi juaj është përtej periudhës së anulimit. Mund të kontaktoni suportin e tenant-it për të parë nëse ka ndonjë përjashtim."
+    },
+    {
+        "language": "it",
+        "guest": "Posso cancellare dopo il periodo consentito?",
+        "agent": "Sfortunatamente, la tua prenotazione è oltre il periodo di cancellazione. Puoi contattare il supporto del tenant per verificare eventuali eccezioni."
+    },
+    {
+        "language": "en",
+        "guest": "Is there parking available?",
+        "agent": "Most of our properties offer parking, but some may have limited space or require a reservation. Please provide your Booking ID so I can check the specific details."
+    },
+    {
+        "language": "al",
+        "guest": "A ka parking në dispozicion?",
+        "agent": "Shumë prej pronave tona ofrojnë parking, por disa mund të kenë hapësirë të kufizuar. Ju lutem ma jepni Booking ID që t'i shikoj detajet e sakta."
+    },
+    {
+        "language": "it",
+        "guest": "C'è un parcheggio disponibile?",
+        "agent": "La maggior parte delle nostre proprietà offre parcheggio, ma alcune potrebbero avere spazio limitato. Forniscimi l'ID della prenotazione per verificare i dettagli specifici."
+    },
+    {
+        "language": "en",
+        "guest": "The neighbors are being very loud.",
+        "agent": "I'm sorry to hear that. Please provide your Booking ID. I will notify the property manager immediately to address the noise issue."
+    },
+    {
+        "language": "al",
+        "guest": "Fqinjët po bajnë shumë zhurmë.",
+        "agent": "Më vjen keq për këtë. Ju lutem ma jepni Booking ID. Do ta njoftoj menjëherë menaxherin e pronës që ta zgjidhë këtë problem."
+    },
+    {
+        "language": "it",
+        "guest": "I vicini fanno molto rumore.",
+        "agent": "Mi dispiace. Forniscimi l'ID della prenotazione. Avviserò immediatamente il gestore della proprietà per risolvere il problema."
+    },
+    {
+        "language": "en",
+        "guest": "What time is check-out?",
+        "agent": "Check-out time is defined per property. Please provide your Booking ID so I can check the exact time for your stay."
+    },
+    {
+        "language": "al",
+        "guest": "Në çfarë ore asht check-out?",
+        "agent": "Koha e check-out asht e përcaktueme për çdo pronë. Ju lutem ma jepni Booking ID që ta shoh kohën e saktë."
+    },
+    {
+        "language": "it",
+        "guest": "A che ora è il check-out?",
+        "agent": "L'ora del check-out è definita per proprietà. Forniscimi l'ID della prenotazione per verificare l'orario esatto."
+    },
+    {
+        "language": "en",
+        "guest": "Something is broken in the apartment.",
+        "agent": "I am sorry for the inconvenience. Please provide your Booking ID and a brief description of what is broken. I will notify the maintenance staff immediately."
+    },
+    {
+        "language": "al",
+        "guest": "Diçka asht e prishun në apartament.",
+        "agent": "Më vjen keq për këtë. Ju lutem ma jepni Booking ID dhe nji përshkrim të shkurt kohë asht e prishun. Do ta njoftoj stafin e mirëmbajtjes menjëherë."
+    },
+    {
+        "language": "it",
+        "guest": "Qualcosa è rotto nell'appartamento.",
+        "agent": "Mi dispiace per il disagio. Per favore forniscimi l'ID della prenotazione e una breve descrizione di cosa è rotto. Avviserò immediatamente il personale di manutenzione."
+    },
+    {
+        "language": "en",
+        "guest": "I want a refund for my stay.",
+        "agent": "I am not able to handle this request directly, but I can help you contact our human support team. This type of request requires manual review. Please contact support@trustbnb.uk."
+    },
+    {
+        "language": "al",
+        "guest": "Dua rimbursim për qëndrimin tim.",
+        "agent": "Nuk jam në gjendje ta trajtoj drejtpërdrejt këtë kërkesë, por mund t'ju ndihmoj të kontaktoni ekipin tonë të mbështetjes njerëzore. Ju lutem kontaktoni support@trustbnb.uk."
+    },
+    {
+        "language": "it",
+        "guest": "Voglio un rimborso per il mio soggiorno.",
+        "agent": "Non posso gestire direttamente questa richiesta, ma posso aiutarti a contattare il nostro supporto umano. Questo tipo di richiesta richiede una revisione manuale. Contatta support@trustbnb.uk."
+    },
+    {
+        "language": "en",
+        "guest": "Can I extend my stay?",
+        "agent": "Stay extensions depend on availability. Please provide your Booking ID. I'll check the calendar and provide you with the updated pricing if the property is available."
+    },
+    {
+        "language": "al",
+        "guest": "A mundem me shty qëndrimin tim?",
+        "agent": "Shtyerja e qëndrimit varet nga disponueshmëria. Ju lutem ma jepni Booking ID. Do ta shoh kalendarin dhe do t'ju njoftoj për çmimin nëse asht e lirë."
+    },
+    {
+        "language": "it",
+        "guest": "Posso prolungare il mio soggiorno?",
+        "agent": "I prolungamenti del soggiorno dipendono dalla disponibilità. Forniscimi l'ID della prenotazione. Controllerò il calendario e ti fornirò il prezzo aggiornato se la proprietà è disponibile."
+    },
+    {
+        "language": "en",
+        "guest": "Delete my account and data.",
+        "agent": "For privacy and security reasons, requests involving personal data must be handled by our human support team. Please contact support@trustbnb.uk so we can process your request safely."
+    },
+    {
+        "language": "al",
+        "guest": "Fshini llogarinë dhe të dhënat e mia.",
+        "agent": "Për arsye privatësie dhe sigurie, kërkesat që përfshijnë të dhëna personale duhet të trajtohen nga ekipi ynë i suportit njerëzor. Ju lutem kontaktoni support@trustbnb.uk."
+    },
+    {
+        "language": "it",
+        "guest": "Elimina il mio account e i miei dati.",
+        "agent": "Per motivi di privacy e sicurezza, le richieste riguardanti i dati personali devono essere gestite dal nostro team di supporto umano. Contatta support@trustbnb.uk per elaborare la tua richiesta."
+    },
+    {
+        "language": "en",
+        "guest": "I have a legal complaint.",
+        "agent": "I can’t assist with legal matters directly. To ensure this is handled correctly, please contact our human support team at support@trustbnb.uk."
+    },
+    {
+        "language": "al",
+        "guest": "Kam nji ankesë ligjore.",
+        "agent": "Nuk mund të ndihmoj drejtpërdrejt me çështje ligjore. Ju lutemi kontaktoni ekipin tonë të mbështetjes njerëzore në support@trustbnb.uk."
+    },
+    {
+        "language": "it",
+        "guest": "Ho un reclamo legale.",
+        "agent": "Non posso fornire assistenza diretta su questioni legali. Ti invitiamo a contattare il nostro supporto umano all'indirizzo support@trustbnb.uk."
+    },
+    {
+        "language": "en",
+        "guest": "Hello, I have a question about my booking.",
+        "agent": "Hello, I’m the TrustBnB support assistant. I can help explain bookings, pricing, and platform rules. How can I assist you today?"
+    },
+    {
+        "language": "al",
+        "guest": "Përshëndetje, kam nji pyetje për rezervimin tim.",
+        "agent": "Përshëndetje, jam asistenti i TrustBnB. Mund t’ju ndihmoj të kuptoni rezervimet, çmimet dhe rregullat e platformës. Si mund t’ju ndihmoj?"
+    },
+    {
+        "language": "it",
+        "guest": "Ciao, ho una domanda sulla mia prenotazione.",
+        "agent": "Ciao, sono l'assistente di supporto TrustBnB. Posso aiutarti a capire prenotazioni, prezzi e regole della piattaforma. Come posso aiutarti?"
+    }
+]

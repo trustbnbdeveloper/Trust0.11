@@ -13,6 +13,7 @@ import { AdminMessaging } from './AdminMessaging';
 import { AnalyticsDashboard } from './AnalyticsDashboard';
 import { AdminBookingManagement } from './AdminBookingManagement';
 import { AdminGuestManagement } from './AdminGuestManagement';
+import { GlassCard, TrustButton } from '../components/core';
 
 type AdminView = 'ORCHESTRATION' | 'OWNERS' | 'PROPERTIES' | 'BOOKINGS' | 'GUESTS' | 'PROPERTY_CARE' | 'FINANCIALS' | 'SECURITY' | 'COMMUNICATIONS' | 'CONTENT' | 'SETTINGS';
 
@@ -410,98 +411,106 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
 
             {/* Admin KPI */}
             <div className="grid grid-cols-4 gap-6 mb-8">
-              <div className="bg-white dark:bg-trust-darkcard dark:border-gray-700 p-5 rounded-lg shadow-sm border border-gray-200">
-                <p className="text-xs text-gray-500 dark:text-gray-400 uppercase font-semibold">Total Properties</p>
-                <h3 className="text-2xl font-bold text-trust-blue dark:text-white mt-1">142</h3>
-                <span className="text-xs text-green-600 font-medium">+4 this week</span>
-              </div>
-              <div className="bg-white dark:bg-trust-darkcard dark:border-gray-700 p-5 rounded-lg shadow-sm border border-gray-200">
-                <p className="text-xs text-gray-500 dark:text-gray-400 uppercase font-semibold">Active Issues</p>
-                <h3 className="text-2xl font-bold text-trust-blue dark:text-white mt-1">3</h3>
-                <span className="text-xs text-orange-500 font-medium">Requires attention</span>
-              </div>
-              <div className="bg-white dark:bg-trust-darkcard dark:border-gray-700 p-5 rounded-lg shadow-sm border border-gray-200">
-                <p className="text-xs text-gray-500 dark:text-gray-400 uppercase font-semibold">Occupancy (Avg)</p>
-                <h3 className="text-2xl font-bold text-trust-blue dark:text-white mt-1">76%</h3>
-                <span className="text-xs text-gray-400 font-medium">Sector avg: 65%</span>
-              </div>
-              <div className="bg-white dark:bg-trust-darkcard dark:border-gray-700 p-5 rounded-lg shadow-sm border border-gray-200">
-                <p className="text-xs text-gray-500 dark:text-gray-400 uppercase font-semibold">Commissions (MTD)</p>
-                <h3 className="text-2xl font-bold text-trust-blue dark:text-white mt-1">€18,420</h3>
-                <span className="text-xs text-gray-400 font-medium">Revenue Share (20%)</span>
-              </div>
+              <GlassCard variant="elevated" padding="md" className="flex flex-col justify-between">
+                <div>
+                  <p className="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-bold tracking-widest">Total Properties</p>
+                  <h3 className="text-3xl font-black text-trust-blue dark:text-white mt-1 tracking-tighter">142</h3>
+                </div>
+                <span className="text-[10px] text-green-600 font-bold bg-green-50 dark:bg-green-900/20 px-2 py-0.5 rounded-full w-fit mt-3">+4 this week</span>
+              </GlassCard>
+              <GlassCard variant="elevated" padding="md" className="flex flex-col justify-between">
+                <div>
+                  <p className="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-bold tracking-widest">Active Issues</p>
+                  <h3 className="text-3xl font-black text-trust-blue dark:text-white mt-1 tracking-tighter">3</h3>
+                </div>
+                <span className="text-[10px] text-orange-500 font-bold bg-orange-50 dark:bg-orange-900/20 px-2 py-0.5 rounded-full w-fit mt-3">Requires attention</span>
+              </GlassCard>
+              <GlassCard variant="elevated" padding="md" className="flex flex-col justify-between">
+                <div>
+                  <p className="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-bold tracking-widest">Occupancy (Avg)</p>
+                  <h3 className="text-3xl font-black text-trust-blue dark:text-white mt-1 tracking-tighter">76%</h3>
+                </div>
+                <span className="text-[10px] text-gray-400 font-bold bg-gray-50 dark:bg-gray-800 px-2 py-0.5 rounded-full w-fit mt-3">Sector avg: 65%</span>
+              </GlassCard>
+              <GlassCard variant="glass" padding="md" className="bg-trust-blue/5 dark:bg-trust-blue/10 flex flex-col justify-between border-trust-blue/20">
+                <div>
+                  <p className="text-[10px] text-trust-blue dark:text-blue-300 uppercase font-bold tracking-widest">Commissions (MTD)</p>
+                  <h3 className="text-3xl font-black text-trust-blue dark:text-white mt-1 tracking-tighter">€18,420</h3>
+                </div>
+                <span className="text-[10px] text-trust-blue dark:text-blue-200 font-bold mt-3">Revenue Share (20%)</span>
+              </GlassCard>
             </div>
 
-            <div className="grid grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Live Property Status */}
-              <div className="col-span-2 bg-white dark:bg-trust-darkcard dark:border-gray-700 rounded-lg shadow-sm border border-gray-200">
-                <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
-                  <h3 className="font-semibold text-trust-blue dark:text-white">Live Property Status</h3>
+              <GlassCard variant="elevated" padding="none" className="col-span-2 overflow-hidden">
+                <div className="px-6 py-4 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center bg-gray-50/30 dark:bg-black/20">
+                  <h3 className="font-serif font-bold text-trust-blue dark:text-white text-lg">Live Property Status</h3>
                   <div className="flex gap-2">
-                    <button className="text-xs bg-gray-100 dark:bg-gray-800 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 px-3 py-1.5 rounded transition-colors text-gray-600">Filter</button>
-                    <button className="text-xs bg-trust-blue text-white px-3 py-1.5 rounded hover:bg-opacity-90 transition-colors">Export Report</button>
+                    <TrustButton variant="ghost" size="sm">Filter</TrustButton>
+                    <TrustButton variant="primary" size="sm">Export Report</TrustButton>
                   </div>
                 </div>
                 <table className="w-full text-sm text-left">
-                  <thead className="bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400 font-medium">
+                  <thead className="bg-gray-50 dark:bg-gray-800/50 text-gray-400 font-black text-[10px] uppercase tracking-widest">
                     <tr>
-                      <th className="px-6 py-3">Property</th>
-                      <th className="px-6 py-3">Status</th>
-                      <th className="px-6 py-3">Next Action</th>
-                      <th className="px-6 py-3 text-right">Actions</th>
+                      <th className="px-6 py-4">Property</th>
+                      <th className="px-6 py-4">Status</th>
+                      <th className="px-6 py-4">Next Action</th>
+                      <th className="px-6 py-4 text-right">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
+                  <tbody className="divide-y divide-gray-50 dark:divide-gray-800">
                     {properties.slice(0, 5).map((prop) => (
-                      <tr key={prop.id} className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-                        <td className="px-6 py-4 font-medium text-trust-blue dark:text-white">{prop.name}</td>
+                      <tr key={prop.id} className="hover:bg-gray-50/50 dark:hover:bg-white/5 transition-colors">
+                        <td className="px-6 py-4 font-bold text-trust-blue dark:text-white">{prop.name}</td>
                         <td className="px-6 py-4">
-                          <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium ${prop.status === 'Active' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400'
+                          <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${prop.status === 'Active' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400'
                             }`}>
-                            {prop.status === 'Active' ? <CheckCircle size={12} /> : <AlertCircle size={12} />}
+                            {prop.status === 'Active' ? <CheckCircle size={10} /> : <AlertCircle size={10} />}
                             {prop.status}
                           </span>
                         </td>
-                        <td className="px-6 py-4 text-gray-500 dark:text-gray-400 text-xs">
+                        <td className="px-6 py-4 text-gray-500 dark:text-gray-400 text-xs font-medium">
                           {prop.status === 'Active' ? 'Guest Checkout (Tomorrow)' : 'Plumber Scheduled (2pm)'}
                         </td>
                         <td className="px-6 py-4 text-right">
-                          <button className="text-trust-blue dark:text-blue-400 hover:underline text-xs font-medium">Manage</button>
+                          <button className="text-trust-blue dark:text-blue-400 hover:text-trust-green text-[10px] font-bold uppercase tracking-wider transition-colors">Manage</button>
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
-              </div>
+              </GlassCard>
 
               {/* Renovation Queue */}
-              <div className="bg-white dark:bg-trust-darkcard dark:border-gray-700 rounded-lg shadow-sm border border-gray-200 flex flex-col">
-                <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center bg-purple-50 dark:bg-purple-900/10">
-                  <h3 className="font-semibold text-purple-900 dark:text-purple-300 flex items-center gap-2">
-                    <Hammer size={16} /> Renovation Queue
+              <GlassCard variant="elevated" padding="none" className="flex flex-col h-full">
+                <div className="px-6 py-4 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center bg-gray-50/50 dark:bg-white/5">
+                  <h3 className="font-bold text-trust-blue dark:text-white flex items-center gap-2">
+                    <Hammer size={16} className="text-purple-500" /> Renovation Queue
                   </h3>
-                  <span className="text-xs font-bold bg-purple-200 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 px-2 py-0.5 rounded-full">3 Active</span>
+                  <span className="text-[10px] font-black bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 px-2 py-0.5 rounded-full uppercase tracking-wider">3 Active</span>
                 </div>
-                <div className="flex-1 p-4 space-y-3 overflow-y-auto">
+                <div className="flex-1 p-4 space-y-3 overflow-y-auto custom-scrollbar">
                   {MOCK_TASKS.map(task => (
-                    <div key={task.id} className="p-3 border border-gray-100 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-800 hover:bg-white dark:hover:bg-gray-750 hover:shadow-sm transition-all cursor-pointer">
+                    <div key={task.id} className="p-4 border border-gray-100 dark:border-gray-800 rounded-xl bg-white dark:bg-trust-darkcard/50 hover:border-purple-200 dark:hover:border-purple-800 transition-all cursor-pointer group">
                       <div className="flex justify-between mb-1">
-                        <span className="text-xs font-bold text-gray-600 dark:text-gray-300">{task.title}</span>
-                        <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${task.priority === 'High' ? 'bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400' : 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400'
+                        <span className="text-xs font-bold text-trust-blue dark:text-white">{task.title}</span>
+                        <span className={`text-[9px] font-black px-1.5 py-0.5 rounded uppercase tracking-wider ${task.priority === 'High' ? 'bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400' : 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400'
                           }`}>{task.priority}</span>
                       </div>
-                      <p className="text-[10px] text-gray-400">Prop ID: {task.propertyId} • {task.type}</p>
+                      <p className="text-[10px] text-gray-400 font-medium">Prop ID: {task.propertyId} • {task.type}</p>
                       <div className="mt-2 flex justify-between items-center">
-                        <span className="text-xs font-medium text-trust-blue dark:text-blue-300">{task.status}</span>
-                        <span className="text-[10px] text-gray-400">Est: €{task.costEstimate}</span>
+                        <span className="text-[10px] font-bold text-trust-blue dark:text-blue-300 uppercase tracking-wider">{task.status}</span>
+                        <span className="text-[10px] text-gray-500 font-mono">Est: €{task.costEstimate}</span>
                       </div>
                     </div>
                   ))}
                 </div>
-                <div className="p-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 text-center rounded-b-lg">
-                  <button className="text-xs font-medium text-trust-blue dark:text-blue-400 hover:underline">View All Tickets</button>
+                <div className="p-3 border-t border-gray-100 dark:border-gray-800 bg-gray-50/30 dark:bg-black/20 text-center">
+                  <button className="text-[10px] font-bold uppercase tracking-widest text-trust-blue dark:text-blue-400 hover:text-purple-500 transition-colors">View All Tickets</button>
                 </div>
-              </div>
+              </GlassCard>
             </div>
           </>
         )}
@@ -514,25 +523,26 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                 <h1 className="text-2xl font-bold text-trust-blue dark:text-white">Property Registry</h1>
                 <p className="text-gray-500 dark:text-gray-400 text-sm">Manage listings, availability, and standards</p>
               </div>
-              <button className="bg-trust-blue text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-opacity-90 transition-colors shadow-sm flex items-center gap-2">
+              <TrustButton variant="primary" size="md" className="shadow-lg shadow-trust-blue/20">
                 <Plus size={16} /> Add Property
-              </button>
+              </TrustButton>
             </header>
 
             {/* Search & Filters */}
-            <div className="bg-white dark:bg-trust-darkcard dark:border-gray-700 p-4 rounded-lg shadow-sm border border-gray-200 mb-6 flex gap-4">
+            <GlassCard variant="flat" padding="sm" className="mb-6 flex gap-4 items-center">
               <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                 <input
                   type="text"
                   placeholder="Search properties by name or location..."
                   value={propertySearch}
                   onChange={(e) => setPropertySearch(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-trust-blue/20 text-sm"
+                  className="w-full pl-10 pr-4 py-2 border-none bg-transparent dark:text-white placeholder-gray-400 focus:outline-none focus:ring-0 text-sm"
                 />
               </div>
+              <div className="h-6 w-px bg-gray-200 dark:bg-gray-700 mx-2" />
               <select
-                className="px-4 py-2 border border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-trust-blue/20"
+                className="px-4 py-2 bg-transparent dark:text-white text-sm font-medium focus:outline-none cursor-pointer"
                 value={propertyStatusFilter}
                 onChange={(e) => setPropertyStatusFilter(e.target.value as any)}
               >
@@ -541,55 +551,56 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                 <option value="Maintenance">Maintenance</option>
                 <option value="Onboarding">Onboarding</option>
               </select>
-            </div>
+            </GlassCard>
 
             {/* Properties Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredProperties.map(prop => (
-                <div key={prop.id} className="bg-white dark:bg-trust-darkcard dark:border-gray-700 rounded-xl shadow-sm border border-gray-200 overflow-hidden group hover:shadow-md transition-all">
+                <GlassCard key={prop.id} variant="elevated" padding="none" className="group hover:-translate-y-1 transition-all duration-300">
                   <div className="h-48 relative overflow-hidden">
-                    <img src={prop.imgUrl} alt={prop.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                    <img src={prop.imgUrl} alt={prop.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                     <div className="absolute top-3 right-3">
-                      <span className={`px-2.5 py-1 rounded-full text-xs font-bold border backdrop-blur-sm ${prop.status === 'Active' ? 'bg-green-500/80 text-white border-green-400/50' :
-                        prop.status === 'Maintenance' ? 'bg-orange-500/80 text-white border-orange-400/50' :
-                          'bg-blue-500/80 text-white border-blue-400/50'
+                      <span className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border backdrop-blur-md shadow-lg ${prop.status === 'Active' ? 'bg-green-500/90 text-white border-green-400/50' :
+                        prop.status === 'Maintenance' ? 'bg-orange-500/90 text-white border-orange-400/50' :
+                          'bg-blue-500/90 text-white border-blue-400/50'
                         }`}>
                         {prop.status}
                       </span>
                     </div>
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
-                      <h3 className="text-white font-bold text-lg truncate">{prop.name}</h3>
-                      <p className="text-white/80 text-xs flex items-center gap-1"><MapPin size={12} /> {prop.location}</p>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-90" />
+                    <div className="absolute bottom-0 left-0 right-0 p-5">
+                      <h3 className="text-white font-bold text-xl truncate tracking-tight">{prop.name}</h3>
+                      <p className="text-white/80 text-xs flex items-center gap-1 mt-1 font-medium"><MapPin size={12} /> {prop.location}</p>
                     </div>
                   </div>
-                  <div className="p-4 space-y-4">
+                  <div className="p-5 space-y-5">
                     <div className="grid grid-cols-3 gap-2 text-center">
-                      <div className="p-2 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                        <p className="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-bold">Occupancy</p>
-                        <p className="text-sm font-bold text-trust-blue dark:text-white">{prop.occupancyRate}%</p>
+                      <div className="p-2 bg-gray-50 dark:bg-white/5 rounded-xl border border-gray-100 dark:border-white/5">
+                        <p className="text-[9px] text-gray-400 uppercase font-black tracking-wider">Occupancy</p>
+                        <p className="text-sm font-bold text-trust-blue dark:text-white mt-1">{prop.occupancyRate}%</p>
                       </div>
-                      <div className="p-2 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                        <p className="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-bold">Revenue</p>
-                        <p className="text-sm font-bold text-trust-blue dark:text-white">€{prop.monthlyRevenue}</p>
+                      <div className="p-2 bg-gray-50 dark:bg-white/5 rounded-xl border border-gray-100 dark:border-white/5">
+                        <p className="text-[9px] text-gray-400 uppercase font-black tracking-wider">Revenue</p>
+                        <p className="text-sm font-bold text-trust-blue dark:text-white mt-1">€{prop.monthlyRevenue}</p>
                       </div>
-                      <div className="p-2 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                        <p className="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-bold">Quality</p>
-                        <p className={`text-sm font-bold ${prop.qualityScore >= 90 ? 'text-green-600' : 'text-orange-500'}`}>{prop.qualityScore}/100</p>
+                      <div className="p-2 bg-gray-50 dark:bg-white/5 rounded-xl border border-gray-100 dark:border-white/5">
+                        <p className="text-[9px] text-gray-400 uppercase font-black tracking-wider">Quality</p>
+                        <p className={`text-sm font-bold mt-1 ${prop.qualityScore >= 90 ? 'text-green-600' : 'text-orange-500'}`}>{prop.qualityScore}</p>
                       </div>
                     </div>
 
-                    <div className="flex justify-between items-center pt-2 border-t border-gray-100 dark:border-gray-700">
+                    <div className="flex justify-between items-center pt-2 border-t border-gray-100 dark:border-gray-800">
                       <div className="flex -space-x-2">
                         {prop.channels.map(c => (
-                          <div key={c} className="w-6 h-6 rounded-full bg-gray-100 dark:bg-gray-700 border-2 border-white dark:border-gray-800 flex items-center justify-center text-[10px] font-bold text-gray-600 dark:text-gray-300" title={c}>
+                          <div key={c} className="w-7 h-7 rounded-full bg-white dark:bg-gray-800 border-2 border-gray-50 dark:border-gray-700 flex items-center justify-center text-[10px] font-bold text-gray-600 dark:text-gray-300 shadow-sm" title={c}>
                             {c[0]}
                           </div>
                         ))}
                       </div>
-                      <button className="text-sm font-medium text-trust-blue dark:text-blue-400 hover:underline">Manage Property</button>
+                      <button className="text-[10px] font-bold text-trust-blue dark:text-blue-400 hover:text-trust-green uppercase tracking-wider transition-colors">Manage Property</button>
                     </div>
                   </div>
-                </div>
+                </GlassCard>
               ))}
             </div>
           </div>
@@ -607,41 +618,45 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                 <p className="text-gray-500 dark:text-gray-400 text-sm">Geographical Matching, Staff Directory & Expenses</p>
               </div>
               <div className="flex gap-4">
-                <div className="bg-white dark:bg-trust-darkcard px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm text-right">
-                  <p className="text-[10px] text-gray-400 uppercase font-bold tracking-widest">Op. Expenses (MTD)</p>
-                  <p className="text-lg font-bold text-trust-blue dark:text-white">€{tasks.reduce((sum, t) => sum + (t.actualCost || 0), 0) + expenses.filter(e => e.type === 'Utility').reduce((sum, e) => sum + e.amount, 0)}</p>
-                </div>
-                <button
-                  onClick={() => setIsUtilityBillModalOpen(true)}
-                  className="bg-white dark:bg-trust-darkcard border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-2 shadow-sm transition-all active:scale-95"
-                >
-                  <Wallet size={16} /> Add Utility Bill
-                </button>
-                <button className="bg-trust-blue text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-opacity-90 flex items-center gap-2 shadow-sm transition-all active:scale-95">
-                  <Plus size={16} /> New Ticket
-                </button>
+                <GlassCard variant="flat" padding="sm" className="bg-white/50 backdrop-blur-sm border-trust-blue/10 flex items-center gap-4">
+                  <div className="text-right">
+                    <p className="text-[10px] text-gray-400 uppercase font-black tracking-widest">Op. Expenses (MTD)</p>
+                    <p className="text-lg font-black text-trust-blue dark:text-white">€{tasks.reduce((sum, t) => sum + (t.actualCost || 0), 0) + expenses.filter(e => e.type === 'Utility').reduce((sum, e) => sum + e.amount, 0)}</p>
+                  </div>
+                  <div className="h-8 w-px bg-gray-200 dark:bg-gray-700" />
+                  <TrustButton
+                    onClick={() => setIsUtilityBillModalOpen(true)}
+                    variant="outline"
+                    size="sm"
+                  >
+                    <Wallet size={16} className="mr-2" /> Add Utility Bill
+                  </TrustButton>
+                  <TrustButton variant="primary" size="sm" className="shadow-lg shadow-trust-blue/20">
+                    <Plus size={16} className="mr-2" /> New Ticket
+                  </TrustButton>
+                </GlassCard>
               </div>
             </header>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Maintenance Queue */}
-              <div className="lg:col-span-2 bg-white dark:bg-trust-darkcard rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+              <GlassCard variant="elevated" padding="none" className="lg:col-span-2 overflow-hidden flex flex-col">
                 <div className="px-6 py-4 border-b border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/30 flex justify-between items-center">
                   <h3 className="font-bold text-trust-blue dark:text-white flex items-center gap-2">
-                    <Hammer size={18} /> Maintenance Tickets
+                    <Hammer size={18} className="text-trust-blue" /> Maintenance Tickets
                   </h3>
-                  <span className="text-xs bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400 px-2 py-0.5 rounded-full font-bold">
+                  <span className="text-[10px] font-black bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400 px-2.5 py-1 rounded-full uppercase tracking-wider">
                     {tasks.filter(t => t.status !== 'Completed').length} Pending
                   </span>
                 </div>
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm text-left">
-                    <thead className="bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400 font-medium">
+                    <thead className="bg-gray-50 dark:bg-gray-800/50 text-gray-400 font-black text-[10px] uppercase tracking-widest">
                       <tr>
-                        <th className="px-6 py-3">Task Details</th>
-                        <th className="px-6 py-3">Property Location</th>
-                        <th className="px-6 py-3">Assignment</th>
-                        <th className="px-6 py-3 text-right">Cost</th>
+                        <th className="px-6 py-4">Task Details</th>
+                        <th className="px-6 py-4">Property Location</th>
+                        <th className="px-6 py-4">Assignment</th>
+                        <th className="px-6 py-4 text-right">Cost</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
@@ -653,14 +668,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                             <td className="px-6 py-4">
                               <p className="font-bold text-trust-blue dark:text-white">{task.title}</p>
                               <div className="flex gap-2 items-center mt-1">
-                                <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold ${task.priority === 'High' ? 'bg-red-100 text-red-600' : 'bg-blue-100 text-blue-600'
+                                <span className={`text-[9px] px-1.5 py-0.5 rounded font-black uppercase tracking-wider ${task.priority === 'High' ? 'bg-red-100 text-red-600' : 'bg-blue-100 text-blue-600'
                                   }`}>{task.priority}</span>
-                                <span className="text-[10px] text-gray-400">{task.type}</span>
+                                <span className="text-[10px] text-gray-400 font-medium">{task.type}</span>
                               </div>
                             </td>
                             <td className="px-6 py-4 text-gray-600 dark:text-gray-300">
                               <div className="flex flex-col">
-                                <span className="font-medium">{prop?.name}</span>
+                                <span className="font-medium text-xs">{prop?.name}</span>
                                 <span className="text-[10px] opacity-70 flex items-center gap-0.5"><MapPin size={10} /> {prop?.location}</span>
                               </div>
                             </td>
@@ -679,16 +694,16 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                                     setStaffSelectionTask(task);
                                     setStaffSelectionPropertyId(task.propertyId);
                                   }}
-                                  className="text-xs text-trust-blue dark:text-blue-400 hover:text-trust-green flex items-center gap-1 font-bold group transition-all"
+                                  className="text-[10px] text-trust-blue dark:text-blue-400 hover:text-trust-green flex items-center gap-1 font-bold uppercase tracking-wider group transition-all"
                                 >
-                                  <Plus size={14} className="group-hover:rotate-90 transition-transform" />
+                                  <Plus size={12} className="group-hover:rotate-90 transition-transform" />
                                   Appoint Handyman
                                 </button>
                               )}
                             </td>
                             <td className="px-6 py-4 text-right">
                               <p className="font-bold text-trust-blue dark:text-white">€{task.actualCost || '---'}</p>
-                              {task.actualCost && <p className="text-[10px] text-gray-400 font-medium italic">Confirmed</p>}
+                              {task.actualCost && <p className="text-[9px] text-gray-400 font-bold uppercase italic">Confirmed</p>}
                             </td>
                           </tr>
                         )
@@ -696,27 +711,27 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                     </tbody>
                   </table>
                 </div>
-              </div>
+              </GlassCard>
 
               {/* Cleaning Ops */}
-              <div className="bg-white dark:bg-trust-darkcard rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden flex flex-col">
+              <GlassCard variant="elevated" padding="none" className="overflow-hidden flex flex-col h-full">
                 <div className="px-6 py-4 border-b border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/30">
                   <h3 className="font-bold text-trust-blue dark:text-white flex items-center gap-2">
-                    <CheckCircle size={18} /> Deep Cleaning Ops
+                    <CheckCircle size={18} className="text-trust-green" /> Deep Cleaning Ops
                   </h3>
                 </div>
-                <div className="flex-1 p-4 space-y-4 overflow-y-auto max-h-[500px]">
+                <div className="flex-1 p-4 space-y-4 overflow-y-auto max-h-[500px] custom-scrollbar">
                   {properties.slice(0, 4).map(prop => (
-                    <div key={prop.id} className="p-4 bg-gray-50 dark:bg-gray-800/40 rounded-xl border border-gray-100 dark:border-gray-700 space-y-3 hover:border-trust-blue/30 transition-all border-l-4 border-l-trust-green">
+                    <div key={prop.id} className="p-4 bg-white dark:bg-gray-800/40 rounded-xl border border-gray-100 dark:border-gray-700 space-y-3 hover:border-trust-green/30 transition-all border-l-4 border-l-trust-green shadow-sm">
                       <div className="flex justify-between items-start">
                         <div>
                           <h4 className="text-sm font-bold text-trust-blue dark:text-white">{prop.name}</h4>
-                          <p className="text-[10px] text-gray-400 uppercase font-bold mt-0.5">{prop.location.split(',')[0]}</p>
+                          <p className="text-[10px] text-gray-400 uppercase font-black tracking-wider mt-0.5">{prop.location.split(',')[0]}</p>
                         </div>
-                        <div className="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 text-[9px] font-bold px-1.5 py-0.5 rounded">AUTO-SCHEDULED</div>
+                        <div className="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 text-[9px] font-black px-1.5 py-0.5 rounded uppercase tracking-wider">AUTO-SCHEDULED</div>
                       </div>
                       <div className="flex gap-2">
-                        <button
+                        <TrustButton
                           onClick={() => {
                             setStaffSelectionTask({
                               id: `C-${prop.id}`,
@@ -730,10 +745,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                             });
                             setStaffSelectionPropertyId(prop.id);
                           }}
-                          className="flex-1 text-[10px] font-bold bg-trust-blue text-white py-2 rounded-lg hover:bg-opacity-90 flex items-center justify-center gap-1 shadow-sm transition-all active:scale-95"
+                          variant="primary"
+                          size="sm"
+                          className="flex-1 text-[10px] uppercase tracking-wider"
                         >
-                          <Plus size={12} /> Find Local Cleaner
-                        </button>
+                          <Plus size={12} className="mr-1" /> Find Local Cleaner
+                        </TrustButton>
                         <button className="p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-gray-500 hover:text-trust-blue transition-all">
                           <ExternalLink size={14} />
                         </button>
@@ -742,22 +759,22 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                   ))}
                 </div>
                 <div className="p-4 border-t border-gray-100 dark:border-gray-700 bg-gray-50/30 text-center">
-                  <button className="text-xs font-bold text-gray-500 hover:text-trust-blue transition-colors">Expand Operational Board</button>
+                  <button className="text-[10px] font-bold uppercase tracking-widest text-gray-500 hover:text-trust-blue transition-colors">Expand Operational Board</button>
                 </div>
-              </div>
+              </GlassCard>
             </div>
 
             {/* Staff & Inventory Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-              <div className="bg-white dark:bg-trust-darkcard p-6 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm">
-                <p className="text-xs text-gray-400 uppercase font-bold mb-3 tracking-widest">Active Staff Directory</p>
+              <GlassCard variant="elevated" padding="md">
+                <p className="text-[10px] text-gray-400 uppercase font-black mb-4 tracking-widest">Active Staff Directory</p>
                 <div className="flex flex-col gap-3">
                   {staff.slice(0, 3).map(s => (
                     <div key={s.id} className="flex items-center gap-3 p-2 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors cursor-pointer group">
                       <img src={s.photo} className="w-8 h-8 rounded-full border border-gray-100" />
                       <div className="flex-1">
                         <p className="text-xs font-bold text-trust-blue dark:text-white">{s.name}</p>
-                        <p className="text-[9px] text-gray-400">{s.location} • {s.type}</p>
+                        <p className="text-[9px] text-gray-400 font-medium">{s.location} • {s.type}</p>
                       </div>
                       <div className="opacity-0 group-hover:opacity-100 flex gap-1">
                         <Phone size={12} className="text-gray-400" />
@@ -766,37 +783,37 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                     </div>
                   ))}
                 </div>
-              </div>
-              <div className="bg-white dark:bg-trust-darkcard p-6 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm">
-                <p className="text-xs text-gray-400 uppercase font-bold mb-3 tracking-widest">Inventory Health</p>
-                <div className="space-y-4">
+              </GlassCard>
+              <GlassCard variant="elevated" padding="md">
+                <p className="text-[10px] text-gray-400 uppercase font-black mb-4 tracking-widest">Inventory Health</p>
+                <div className="space-y-5">
                   <div>
-                    <div className="flex justify-between text-[10px] font-bold mb-1">
-                      <span className="text-gray-600">Linens & Towels</span>
+                    <div className="flex justify-between text-[10px] font-bold mb-1.5">
+                      <span className="text-gray-600 dark:text-gray-300">Linens & Towels</span>
                       <span className="text-red-500">22% CRITICAL</span>
                     </div>
-                    <div className="w-full bg-gray-100 dark:bg-gray-800 h-1.5 rounded-full overflow-hidden">
+                    <div className="w-full bg-gray-100 dark:bg-gray-800 h-2 rounded-full overflow-hidden">
                       <div className="bg-red-500 h-full" style={{ width: '22%' }} />
                     </div>
                   </div>
                   <div>
-                    <div className="flex justify-between text-[10px] font-bold mb-1">
-                      <span className="text-gray-600">Cleaning Supplies</span>
+                    <div className="flex justify-between text-[10px] font-bold mb-1.5">
+                      <span className="text-gray-600 dark:text-gray-300">Cleaning Supplies</span>
                       <span className="text-trust-green">89% STABLE</span>
                     </div>
-                    <div className="w-full bg-gray-100 dark:bg-gray-800 h-1.5 rounded-full overflow-hidden">
+                    <div className="w-full bg-gray-100 dark:bg-gray-800 h-2 rounded-full overflow-hidden">
                       <div className="bg-trust-green h-full" style={{ width: '89%' }} />
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="bg-white dark:bg-trust-darkcard p-6 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm flex flex-col justify-center items-center text-center">
-                <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 text-trust-green rounded-full flex items-center justify-center mb-2">
-                  <TrendingUp size={24} />
+              </GlassCard>
+              <GlassCard variant="elevated" padding="md" className="flex flex-col justify-center items-center text-center bg-gradient-to-br from-white to-green-50/50 dark:from-trust-darkcard dark:to-green-900/10">
+                <div className="w-14 h-14 bg-green-100 dark:bg-green-900/30 text-trust-green rounded-full flex items-center justify-center mb-3 shadow-inner">
+                  <TrendingUp size={28} />
                 </div>
-                <h3 className="text-2xl font-bold text-trust-blue dark:text-white">94.2</h3>
-                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">Care Quality Index</p>
-              </div>
+                <h3 className="text-4xl font-black text-trust-blue dark:text-white tracking-tighter">94.2</h3>
+                <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest mt-1">Care Quality Index</p>
+              </GlassCard>
             </div>
 
             {/* Expense Analytics & Reports */}

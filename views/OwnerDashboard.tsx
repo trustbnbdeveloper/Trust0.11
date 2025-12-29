@@ -14,6 +14,8 @@ import { generateAIResponse } from '../services/geminiProxy';
 import { useAppContext } from '../contexts/AppContext';
 import { Owner, Property, AppNotification } from '../types';
 import { FooterInfoModal, FooterModalType } from '../components/FooterInfoModal';
+import { GlassCard } from '../components/core/GlassCard';
+import { TrustButton } from '../components/core/TrustButton';
 
 // Helper for Channel Branding
 const getChannelConfig = (channel: string) => {
@@ -624,127 +626,145 @@ export const OwnerDashboard: React.FC = () => {
             </div>
 
             {/* Stats Grid */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-              {/* Total Revenue with Commission Breakdown - Full Width on Mobile */}
-              <div className="col-span-2 bg-white dark:bg-trust-darkcard p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 transition-colors group">
-                <div className="flex justify-between items-start mb-4">
-                  <div className="p-2 bg-trust-gray dark:bg-gray-800 rounded-lg text-trust-blue dark:text-white">
-                    <Wallet size={24} />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+              {/* Total Revenue with Commission Breakdown */}
+              <GlassCard
+                variant="elevated"
+                padding="md"
+                className="col-span-1 md:col-span-2 group relative overflow-hidden"
+              >
+                <div className="absolute top-0 right-0 w-32 h-32 bg-trust-blue/5 rounded-full -mr-16 -mt-16 transition-transform group-hover:scale-110" />
+
+                <div className="flex justify-between items-start mb-6">
+                  <div className="p-3 bg-trust-blue/5 dark:bg-white/5 rounded-xl text-trust-blue dark:text-white">
+                    <Wallet size={28} />
                   </div>
-                  <span className="flex items-center text-trust-green text-sm font-medium bg-green-50 dark:bg-green-900/30 px-2 py-1 rounded">
-                    +12.5% <TrendingUp size={14} className="ml-1" />
-                  </span>
+                  <div className="flex flex-col items-end">
+                    <span className="flex items-center text-trust-green text-sm font-bold bg-trust-green/10 px-2 py-1 rounded-lg mb-1">
+                      +12.5% <TrendingUp size={14} className="ml-1" />
+                    </span>
+                    <span className="text-[10px] text-gray-400 uppercase tracking-widest font-bold">vs last month</span>
+                  </div>
                 </div>
 
-                <div className="space-y-1 mb-2">
-                  <div className="flex justify-between text-xs text-gray-400">
+                <div className="space-y-2 mb-6">
+                  <div className="flex justify-between text-xs text-gray-500 font-medium">
                     <span>{t('fin_gross')}</span>
-                    <span>{renderFinancialValue('€6,775.00')}</span>
+                    <span className="font-mono">{renderFinancialValue('€6,775.00')}</span>
                   </div>
-                  <div className="flex justify-between text-xs text-gray-400 border-b border-gray-100 dark:border-gray-700 pb-1">
-                    <span>{t('fin_commission')}</span>
-                    <span className="text-red-400">-{renderFinancialValue('€1,355.00')}</span>
+                  <div className="flex justify-between text-xs text-gray-500 font-medium border-b border-gray-100 dark:border-gray-800 pb-2">
+                    <span>{t('fin_commission')} (20%)</span>
+                    <span className="text-red-500 font-mono">-{renderFinancialValue('€1,355.00')}</span>
                   </div>
                 </div>
 
-                <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">{t('fin_net')}</p>
-                <div className="flex items-center gap-3">
-                  <h3 className="text-3xl font-bold text-trust-blue dark:text-white mt-1">
-                    {renderFinancialValue('€5,420.00')}
-                  </h3>
-                  <button
-                    onClick={() => setPrivacyMode(!privacyMode)}
-                    className="mt-1 text-gray-400 hover:text-trust-blue dark:hover:text-white transition-colors p-1.5 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg"
-                    title={privacyMode ? "Show Finances" : "Hide Finances"}
-                  >
-                    {privacyMode ? <Eye size={20} /> : <EyeOff size={20} />}
-                  </button>
+                <div className="flex justify-between items-end">
+                  <div>
+                    <p className="text-xs text-gray-400 uppercase tracking-widest font-bold mb-1">{t('fin_net')}</p>
+                    <div className="flex items-center gap-3">
+                      <h3 className="text-4xl font-black text-trust-blue dark:text-white tracking-tighter">
+                        {renderFinancialValue('€5,420.00')}
+                      </h3>
+                      <button
+                        onClick={() => setPrivacyMode(!privacyMode)}
+                        className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg text-gray-400 transition-colors"
+                        aria-label={privacyMode ? "Show sensitive data" : "Hide sensitive data"}
+                      >
+                        {privacyMode ? <Eye size={18} /> : <EyeOff size={18} />}
+                      </button>
+                    </div>
+                  </div>
+                  <TrustButton variant="ghost" size="sm" className="text-[10px] uppercase tracking-widest font-bold">
+                    View Ledger
+                  </TrustButton>
                 </div>
-              </div>
+              </GlassCard>
 
-              {/* Occupancy - Square & Side-by-Side on Mobile */}
-              <div
-                className="col-span-1 aspect-square bg-white dark:bg-trust-darkcard p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 transition-all flex flex-col justify-between cursor-pointer active:scale-95 md:hover:shadow-md select-none"
-                onTouchStart={() => handleTouchStart('OCCUPANCY')}
-                onTouchEnd={handleTouchEnd}
+              {/* Occupancy */}
+              <GlassCard
+                variant="elevated"
+                padding="md"
+                className="col-span-1 flex flex-col justify-between cursor-pointer group active:scale-[0.98] transition-all"
                 onClick={() => handleCardClick('OCCUPANCY')}
-                onContextMenu={(e) => e.preventDefault()}
-                title="Click for details"
               >
                 <div className="flex justify-between items-start">
-                  <div className="p-2 bg-trust-gray dark:bg-gray-800 rounded-lg text-trust-blue dark:text-white">
-                    <Home size={20} />
+                  <div className="p-2.5 bg-trust-blue/5 dark:bg-white/5 rounded-xl text-trust-blue dark:text-white group-hover:scale-110 transition-transform">
+                    <Home size={22} />
                   </div>
-                  <span className="text-gray-400 text-[10px] text-right leading-tight">Avg.<br />Portfolio</span>
+                  <div className="text-right">
+                    <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Occupancy</p>
+                    <p className="text-xs text-trust-green font-bold">Stable</p>
+                  </div>
                 </div>
                 <div>
-                  <p className="text-gray-500 dark:text-gray-400 text-xs font-medium mb-1">Occupancy</p>
-                  <h3 className="text-2xl md:text-3xl font-bold text-trust-blue dark:text-white">82%</h3>
+                  <h3 className="text-4xl font-black text-trust-blue dark:text-white tracking-tighter">82%</h3>
+                  <p className="text-[10px] text-gray-400 mt-2 font-medium">Portfolio Average</p>
                 </div>
-              </div>
+              </GlassCard>
 
-              {/* Upcoming Payout - Square & Side-by-Side on Mobile */}
-              <div
-                className="col-span-1 aspect-square bg-white dark:bg-trust-darkcard p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 transition-all flex flex-col justify-between cursor-pointer active:scale-95 md:hover:shadow-md select-none"
-                onTouchStart={() => handleTouchStart('PAYOUT')}
-                onTouchEnd={handleTouchEnd}
+              {/* Upcoming Payout */}
+              <GlassCard
+                variant="elevated"
+                padding="md"
+                className="col-span-1 flex flex-col justify-between cursor-pointer group active:scale-[0.98] transition-all"
                 onClick={() => handleCardClick('PAYOUT')}
-                onContextMenu={(e) => e.preventDefault()}
-                title="Click for details"
               >
                 <div className="flex justify-between items-start">
-                  <div className="p-2 bg-trust-gray dark:bg-gray-800 rounded-lg text-trust-blue dark:text-white">
-                    <Calendar size={20} />
+                  <div className="p-2.5 bg-trust-blue/5 dark:bg-white/5 rounded-xl text-trust-blue dark:text-white group-hover:scale-110 transition-transform">
+                    <Calendar size={22} />
                   </div>
-                  <span className="text-trust-blue dark:text-blue-300 text-[10px] font-bold border border-trust-blue dark:border-blue-300 px-1.5 py-0.5 rounded">
-                    2 DAYS
+                  <span className="px-2 py-0.5 bg-trust-blue text-white text-[10px] font-bold rounded-lg animate-pulse">
+                    IN 2 DAYS
                   </span>
                 </div>
                 <div>
-                  <p className="text-gray-500 dark:text-gray-400 text-xs font-medium mb-1">Transfer</p>
-                  <h3 className="text-xl md:text-2xl font-bold text-trust-blue dark:text-white truncate">
+                  <h3 className="text-2xl md:text-3xl font-black text-trust-blue dark:text-white tracking-tighter truncate">
                     {renderFinancialValue('€2,450')}
                   </h3>
+                  <p className="text-[10px] text-gray-400 mt-2 font-medium">Verified Transfer</p>
                 </div>
-              </div>
+              </GlassCard>
             </div>
 
             {/* Main Content Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-in fade-in slide-in-from-bottom-6 duration-700">
 
-              {/* Interactive Smart Insights Card (Replaces Static Revenue Chart) */}
-              <div className="lg:col-span-2 bg-white dark:bg-trust-darkcard rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 transition-colors overflow-hidden flex flex-col h-[450px] lg:h-[550px]">
-
+              {/* Interactive Smart Insights Card */}
+              <GlassCard
+                variant="glass"
+                padding="none"
+                className="lg:col-span-2 shadow-sm flex flex-col h-[450px] lg:h-[550px]"
+              >
                 {/* Header with Tabs */}
-                <div className="p-4 border-b border-gray-100 dark:border-gray-700 flex flex-col sm:flex-row justify-between items-center gap-4 bg-gray-50/50 dark:bg-gray-800/30">
+                <div className="p-5 border-b border-gray-100 dark:border-gray-800 flex flex-col sm:flex-row justify-between items-center gap-4 bg-gray-50/30 dark:bg-black/20">
                   <div className="flex items-center gap-3 self-start sm:self-center">
-                    <button
+                    <TrustButton
                       onClick={handleGenerateAI}
-                      disabled={isGeneratingInsight}
-                      className="w-8 h-8 rounded-full bg-trust-blue text-white dark:bg-trust-blue dark:text-white flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-105 hover:bg-trust-blue/90 transition-all cursor-pointer group disabled:opacity-70 disabled:cursor-not-allowed disabled:scale-100"
-                      title="Generate AI Insight"
+                      isLoading={isGeneratingInsight}
+                      variant="primary"
+                      size="sm"
+                      className="w-10 h-10 rounded-full"
+                      aria-label="Generate AI Insight"
                     >
-                      {isGeneratingInsight ? <Loader2 size={14} className="animate-spin" /> : <Sparkles size={14} className="group-hover:animate-pulse" />}
-                    </button>
-                    <h3 className="font-semibold text-trust-blue dark:text-white text-lg">
-                      Smart Insights
-                    </h3>
+                      <Sparkles size={16} />
+                    </TrustButton>
+                    <div>
+                      <h3 className="font-serif font-bold text-trust-blue dark:text-white text-lg leading-tight">Smart Portfolio Insights</h3>
+                      <p className="text-[10px] text-gray-400 uppercase tracking-widest font-bold">Powered by TrustAI</p>
+                    </div>
                   </div>
 
-                  <div className="flex bg-white dark:bg-trust-darkcard rounded-lg p-1 border border-gray-200 dark:border-gray-700 shadow-sm w-full sm:w-auto">
+                  <div className="flex bg-white dark:bg-trust-darkcard rounded-xl p-1 border border-gray-200 dark:border-gray-700 shadow-sm w-full sm:w-auto">
                     {(['REVENUE', 'MAINTENANCE', 'CASHFLOW'] as InsightType[]).map((type) => (
                       <button
                         key={type}
                         onClick={() => setInsightType(type)}
-                        className={`flex-1 sm:flex-none px-3 py-1.5 text-xs font-bold rounded-md transition-all flex items-center justify-center gap-1.5 ${insightType === type
-                          ? 'bg-trust-blue text-white shadow'
-                          : 'text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800'
+                        className={`flex-1 sm:flex-none px-4 py-2 text-[10px] font-black tracking-widest uppercase rounded-lg transition-all flex items-center justify-center gap-2 ${insightType === type
+                          ? 'bg-trust-blue text-white shadow-lg'
+                          : 'text-gray-400 hover:text-trust-blue dark:hover:text-white'
                           }`}
                       >
-                        {type === 'REVENUE' && <BarChart3 size={12} />}
-                        {type === 'MAINTENANCE' && <Hammer size={12} />}
-                        {type === 'CASHFLOW' && <RefreshCw size={12} />}
-                        {type.charAt(0) + type.slice(1).toLowerCase()}
+                        {type}
                       </button>
                     ))}
                   </div>
@@ -851,379 +871,330 @@ export const OwnerDashboard: React.FC = () => {
                   )}
 
                 </div>
-
-                {/* AI Footer - Only show if text exists */}
-                {aiInsightText && (
-                  <div className="px-6 py-4 bg-gray-50/50 dark:bg-trust-darkcard border-t border-gray-100 dark:border-gray-700 min-h-[auto] flex items-center transition-all animate-in slide-in-from-bottom-2 fade-in">
-                    <div className="flex-1">
-                      <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed italic">
-                        "{aiInsightText}"
-                      </p>
-                    </div>
-                  </div>
-                )}
-
-              </div>
+              </GlassCard>
 
               {/* Properties List & Distribution */}
-              <div className="bg-white dark:bg-trust-darkcard rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 transition-colors h-[450px] lg:h-[550px] flex flex-col">
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-6 border-b border-gray-100 dark:border-gray-700 shrink-0 gap-3">
-                  <div className="flex items-center gap-3">
-                    <h3 className="font-semibold text-trust-blue dark:text-white text-lg">My Properties</h3>
-                    <button
-                      onClick={() => setIsOnboardingOpen(true)}
-                      className="inline-flex items-center gap-1 px-3 py-1 bg-trust-blue/10 text-trust-blue dark:bg-white/10 dark:text-blue-300 rounded-full text-[10px] font-bold uppercase tracking-wider hover:bg-trust-blue hover:text-white transition-all shadow-sm"
-                    >
-                      <Plus size={12} /> Register
-                    </button>
-                  </div>
-                  <div className="flex gap-2">
-                    {/* Status Filter */}
-                    <div className="relative">
-                      <select
-                        value={propertyStatusFilter}
-                        onChange={(e) => setPropertyStatusFilter(e.target.value as any)}
-                        className="appearance-none bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-xs font-medium py-1.5 pl-3 pr-8 rounded-lg focus:outline-none focus:ring-1 focus:ring-trust-blue cursor-pointer"
-                      >
-                        <option value="All">All Status</option>
-                        <option value="Active">Active</option>
-                        <option value="Maintenance">Maintenance</option>
-                        <option value="Onboarding">Onboarding</option>
-                        <option value="Review">In Review</option>
-                      </select>
-                      <Filter size={12} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-                    </div>
-
-                    {/* Channel Filter */}
-                    <div className="relative">
-                      <select
-                        value={propertyChannelFilter}
-                        onChange={(e) => setPropertyChannelFilter(e.target.value as any)}
-                        className="appearance-none bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-xs font-medium py-1.5 pl-3 pr-8 rounded-lg focus:outline-none focus:ring-1 focus:ring-trust-blue cursor-pointer"
-                      >
-                        <option value="All">All Channels</option>
-                        <option value="Airbnb">Airbnb</option>
-                        <option value="Booking">Booking.com</option>
-                        <option value="Direct">Direct</option>
-                      </select>
-                      <Globe size={12} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-                    </div>
-                  </div>
+              <div className="space-y-6">
+                <div className="flex justify-between items-center">
+                  <h3 className="font-serif font-bold text-trust-blue dark:text-white text-xl">Portfolio</h3>
+                  <TrustButton variant="outline" size="sm" onClick={() => setIsOnboardingOpen(true)}>
+                    <Plus size={16} className="mr-1" /> Add
+                  </TrustButton>
                 </div>
-                <div className="space-y-6 p-6 overflow-y-auto flex-1 mobile-scrollbar-hide">
-                  {filteredProperties.length > 0 ? (
-                    filteredProperties.map((prop) => (
-                      <div
-                        key={prop.id}
-                        className="p-5 bg-gray-50 dark:bg-gray-800/50 rounded-xl transition-all border border-gray-100 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer active:scale-95 select-none"
-                        onClick={() => handlePropertyClick(prop)}
-                        onTouchStart={() => handlePropertyTouchStart(prop)}
-                        onTouchEnd={handlePropertyTouchEnd}
-                      >
-                        <div className="flex items-center gap-4">
-                          {/* Photo */}
-                          <img src={prop.imgUrl} alt={prop.name} className="w-16 h-16 rounded-lg object-cover shadow-sm bg-gray-200" />
 
-                          {/* Name */}
-                          <div className="flex-1 min-w-0">
-                            <h4 className="font-bold text-trust-blue dark:text-white text-sm truncate">{prop.name}</h4>
-                          </div>
-
-                          {/* Metrics Row */}
-                          <div className="flex items-center gap-6">
-                            <div className="text-right">
-                              <span className="text-[9px] text-gray-400 uppercase font-bold tracking-wider">Revenue</span>
-                              <span className="block font-bold text-trust-blue dark:text-white text-sm">{renderFinancialValue(`€${prop.monthlyRevenue}`)}</span>
-                            </div>
-                            <div className="text-right pl-6 border-l border-gray-200 dark:border-gray-700">
-                              <span className="text-[9px] text-gray-400 uppercase font-bold tracking-wider">Occupancy</span>
-                              <span className="block font-bold text-trust-blue dark:text-white text-sm">{prop.occupancyRate}%</span>
-                            </div>
+                <div className="space-y-4">
+                  {filteredProperties.map(prop => (
+                    <GlassCard
+                      key={prop.id}
+                      variant="elevated"
+                      padding="sm"
+                      className="cursor-pointer group hover:-translate-y-1 transition-all"
+                      onClick={() => setCalendarProperty(prop)}
+                    >
+                      <div className="flex gap-4">
+                        <div className="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0">
+                          <img src={prop.imgUrl} alt={prop.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-bold text-trust-blue dark:text-white truncate">{prop.name}</h4>
+                          <p className="text-[10px] text-gray-400 uppercase tracking-widest font-bold mt-0.5">{prop.location}</p>
+                          <div className="flex items-center gap-2 mt-2">
+                            <span className={`w-2 h-2 rounded-full ${prop.status === 'Active' ? 'bg-trust-green' : 'bg-red-500'}`} />
+                            <span className="text-[10px] font-bold text-gray-400">{prop.status}</span>
                           </div>
                         </div>
                       </div>
-                    ))
-                  ) : (
-                    <div className="flex flex-col items-center justify-center h-full text-gray-400">
-                      <Filter size={32} className="mb-2 opacity-20" />
-                      <p className="text-sm">No properties match your filters</p>
-                      <button
-                        onClick={() => { setPropertyStatusFilter('All'); setPropertyChannelFilter('All'); }}
-                        className="text-trust-blue text-xs font-bold mt-2 hover:underline"
-                      >
-                        Clear Filters
-                      </button>
-                    </div>
-                  )}
+                    </GlassCard>
                 </div>
               </div>
             </div>
 
             {/* Maintenance & Quality Upgrades (Renovation) */}
-            <div className="bg-white dark:bg-trust-darkcard rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden transition-colors animate-in fade-in slide-in-from-bottom-8 duration-700">
-              <div className="p-6 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center">
+            <GlassCard
+              variant="elevated"
+              padding="none"
+              className="mt-8 transition-colors animate-in fade-in slide-in-from-bottom-8 duration-700"
+            >
+              <div className="p-6 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center bg-gray-50/30 dark:bg-black/20">
                 <div>
-                  <h3 className="font-semibold text-trust-blue dark:text-white text-lg flex items-center gap-2">
-                    <Hammer size={20} className="text-trust-green" />
-                    {t('maint_title')}
+                  <h3 className="font-serif font-bold text-trust-blue dark:text-white text-xl flex items-center gap-3">
+                    <Hammer size={24} className="text-trust-green" />
+                    Property Maintenance Ledger
                   </h3>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Transparent tracking of property care and value-add renovations.</p>
+                  <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">Institutional Care & Value-Add Enhancements</p>
                 </div>
-                <button className="text-gray-400 hover:text-trust-blue dark:hover:text-white">
-                  <ArrowUpRight size={20} />
-                </button>
+                <TrustButton variant="ghost" size="sm">
+                  View Ledger <ArrowUpRight size={16} className="ml-1" />
+                </TrustButton>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Transparent tracking of property care and value-add renovations.</p>
               </div>
-              <div className="p-6">
-                <div className="grid md:grid-cols-3 gap-6">
-                  {MOCK_TASKS.map(task => (
-                    <div key={task.id} className="border border-gray-200 dark:border-gray-600 rounded-lg p-4 flex flex-col gap-2">
-                      <div className="flex justify-between items-start">
-                        <span className={`text-[10px] px-2 py-1 rounded font-bold uppercase tracking-wider ${task.type === 'Renovation' ? 'bg-purple-100 text-purple-700' :
-                          task.type === 'Repair' ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700'
-                          }`}>
-                          {task.type}
-                        </span>
-                        <span className="text-xs text-gray-400">{task.dateScheduled}</span>
-                      </div>
-                      <h4 className="font-medium text-trust-blue dark:text-white text-sm">{task.title}</h4>
-                      <div className="mt-auto pt-2 flex justify-between items-center border-t border-gray-100 dark:border-gray-700">
-                        <span className="text-xs text-gray-500">Est. Cost: <span className="font-semibold">{privacyMode ? '€***' : `€${task.costEstimate}`}</span></span>
-                        <span className={`text-xs font-medium ${task.status === 'In Progress' ? 'text-blue-600' :
-                          task.status === 'Completed' ? 'text-green-600' : 'text-gray-500'
-                          }`}>
-                          {task.status}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Transactions Table */}
-            <div className="bg-white dark:bg-trust-darkcard rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden transition-colors animate-in fade-in slide-in-from-bottom-8 duration-700">
-              <div className="p-6 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center">
-                <h3 className="font-semibold text-trust-blue dark:text-white text-lg">Recent Financial Activity</h3>
-                <button className="text-gray-400 hover:text-trust-blue dark:hover:text-white">
-                  <ArrowUpRight size={20} />
-                </button>
-              </div>
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm text-left">
-                  <thead className="bg-trust-gray dark:bg-gray-800 text-gray-500 dark:text-gray-400 uppercase text-xs">
-                    <tr>
-                      <th className="px-6 py-3 font-medium">Date</th>
-                      <th className="px-6 py-3 font-medium">Description</th>
-                      <th className="px-6 py-3 font-medium">Category</th>
-                      <th className="px-6 py-3 font-medium">Ledger Hash</th>
-                      <th className="px-6 py-3 font-medium text-right">Amount</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
-                    {MOCK_TRANSACTIONS.map((tx) => (
-                      <tr key={tx.id} className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-                        <td className="px-6 py-4 text-gray-600 dark:text-gray-400">{tx.date}</td>
-                        <td className="px-6 py-4 font-medium text-trust-blue dark:text-white">{tx.description}</td>
-                        <td className="px-6 py-4">
-                          <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs text-gray-500 dark:text-gray-300">{tx.category}</span>
-                        </td>
-                        <td className="px-6 py-4">
-                          <span className="font-mono text-[10px] text-gray-400">{tx.hash}</span>
-                        </td>
-                        <td className={`px-6 py-4 text-right font-medium ${tx.type === 'Credit' ? 'text-trust-green' : 'text-gray-800 dark:text-gray-200'}`}>
-                          {privacyMode ? <span className="blur-sm select-none text-xs text-gray-400">ENCRYPTED</span> : (
-                            <>
-                              {tx.type === 'Debit' ? '-' : '+'}€{tx.amount}
-                            </>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </>
-        )}
-      </main>
-
-      {/* Floating Chat Buttons */}
-      <div className="fixed bottom-6 right-6 flex flex-col gap-3 z-40">
-
-        {/* Support Chat Button */}
-        <button
-          onClick={() => {
-            setIsSupportOpen(!isSupportOpen);
-            setIsChatOpen(false); // Close AI chat if open
-          }}
-          className="w-14 h-14 bg-trust-blue text-white rounded-full shadow-lg hover:bg-opacity-90 transition-transform hover:scale-105 flex items-center justify-center relative group"
-          title="Contact Support"
-        >
-          <div className="absolute inset-0 bg-trust-blue rounded-full animate-ping opacity-20"></div>
-          {unreadSupportCount > 0 && (
-            <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-[10px] flex items-center justify-center rounded-full font-bold border-2 border-white dark:border-trust-darkbg z-10">
-              {unreadSupportCount}
-            </span>
-          )}
-          <MessageSquare size={24} />
-          {/* Tooltip */}
-          <div className="absolute right-full mr-3 top-1/2 -translate-y-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-            Admin Support
-          </div>
-        </button>
-
-        {/* AI Chat Button */}
-        <button
-          onClick={() => {
-            setIsChatOpen(!isChatOpen);
-            setIsSupportOpen(false); // Close Support chat if open
-          }}
-          className="w-14 h-14 bg-white dark:bg-trust-darkcard text-trust-blue dark:text-white rounded-full shadow-lg border border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-transform hover:scale-105 flex items-center justify-center group"
-          title="AI Assistant"
-        >
-          <Sparkles size={24} />
-          {/* Tooltip */}
-          <div className="absolute right-full mr-3 top-1/2 -translate-y-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-            AI Assistant
-          </div>
-        </button>
-      </div>
-
-      {/* Interactive Detail Modal (General) */}
-      {activeModal && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-          <div
-            className="absolute inset-0 bg-trust-blue/30 backdrop-blur-sm transition-opacity"
-            onClick={() => setActiveModal(null)}
-          />
-          <div className="relative bg-white dark:bg-trust-darkcard w-full max-w-md rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
-
-            <div className="bg-trust-blue dark:bg-black/40 px-6 py-4 flex justify-between items-center text-white border-b border-white/10">
-              <div className="flex items-center gap-2">
-                {activeModal === 'OCCUPANCY' ? <Home size={18} /> : <Wallet size={18} />}
-                <span className="font-serif font-bold text-lg">
-                  {activeModal === 'OCCUPANCY' ? 'Occupancy Portfolio' : 'Payout Breakdown'}
-                </span>
-              </div>
-              <button
-                onClick={() => setActiveModal(null)}
-                className="p-1 hover:bg-white/10 rounded-full transition-colors"
-              >
-                <X size={20} />
+              <button className="text-gray-400 hover:text-trust-blue dark:hover:text-white">
+                <ArrowUpRight size={20} />
               </button>
             </div>
-
             <div className="p-6">
-              {activeModal === 'OCCUPANCY' ? (
-                <div className="space-y-6">
-                  <div className="text-center">
-                    <h3 className="text-4xl font-bold text-trust-blue dark:text-white">82%</h3>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Average Portfolio Occupancy</p>
-                  </div>
-                  <div className="space-y-4">
-                    {MOCK_PROPERTIES.map(prop => (
-                      <div key={prop.id}>
-                        <div className="flex justify-between text-sm mb-1">
-                          <span className="font-medium text-gray-700 dark:text-gray-200">{prop.name}</span>
-                          <span className="font-bold text-trust-blue dark:text-white">{prop.occupancyRate}%</span>
-                        </div>
-                        <div className="h-2 w-full bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
-                          <div
-                            className={`h-full rounded-full ${prop.occupancyRate > 80 ? 'bg-green-500' : prop.occupancyRate > 50 ? 'bg-orange-400' : 'bg-red-400'}`}
-                            style={{ width: `${prop.occupancyRate}%` }}
-                          ></div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ) : (
-                <div className="space-y-6">
-                  <div className="bg-trust-gray dark:bg-gray-800 p-4 rounded-xl flex items-center justify-between">
-                    <div>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 uppercase font-semibold">Net Transfer</p>
-                      <h3 className="text-2xl font-bold text-trust-blue dark:text-white">{renderFinancialValue('€2,450.00')}</h3>
+              <div className="grid md:grid-cols-3 gap-6">
+                {MOCK_TASKS.map(task => (
+                  <div key={task.id} className="border border-gray-200 dark:border-gray-600 rounded-lg p-4 flex flex-col gap-2">
+                    <div className="flex justify-between items-start">
+                      <span className={`text-[10px] px-2 py-1 rounded font-bold uppercase tracking-wider ${task.type === 'Renovation' ? 'bg-purple-100 text-purple-700' :
+                        task.type === 'Repair' ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700'
+                        }`}>
+                        {task.type}
+                      </span>
+                      <span className="text-xs text-gray-400">{task.dateScheduled}</span>
                     </div>
-                    <div className="text-right">
-                      <p className="text-xs text-gray-500 dark:text-gray-400">Est. Date</p>
-                      <p className="text-sm font-bold text-trust-blue dark:text-white">Aug 15, 2024</p>
+                    <h4 className="font-medium text-trust-blue dark:text-white text-sm">{task.title}</h4>
+                    <div className="mt-auto pt-2 flex justify-between items-center border-t border-gray-100 dark:border-gray-700">
+                      <span className="text-xs text-gray-500">Est. Cost: <span className="font-semibold">{privacyMode ? '€***' : `€${task.costEstimate}`}</span></span>
+                      <span className={`text-xs font-medium ${task.status === 'In Progress' ? 'text-blue-600' :
+                        task.status === 'Completed' ? 'text-green-600' : 'text-gray-500'
+                        }`}>
+                        {task.status}
+                      </span>
                     </div>
                   </div>
-
-                  <div className="space-y-3">
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-600 dark:text-gray-400">Gross Bookings (July)</span>
-                      <span className="font-medium text-gray-900 dark:text-white">{renderFinancialValue('€3,200.00')}</span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-600 dark:text-gray-400">Cleaning Fees Collected</span>
-                      <span className="font-medium text-green-600">{renderFinancialValue('+€450.00')}</span>
-                    </div>
-                    <div className="border-t border-gray-100 dark:border-gray-700 my-2"></div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-600 dark:text-gray-400">TrustBnB Commission (20%)</span>
-                      <span className="font-medium text-red-500">{renderFinancialValue('-€730.00')}</span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-600 dark:text-gray-400">VAT & Tourism Tax</span>
-                      <span className="font-medium text-red-500">{renderFinancialValue('-€470.00')}</span>
-                    </div>
-                  </div>
-
-                  <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg flex gap-3 items-start">
-                    <CreditCard size={16} className="text-trust-blue dark:text-blue-300 mt-0.5" />
-                    <p className="text-xs text-trust-blue dark:text-blue-200">
-                      Transfer initiated to <strong>UBS Account (...8921)</strong>. Funds typically arrive within 2 business days.
-                    </p>
-                  </div>
-                </div>
-              )}
+                ))}
+              </div>
             </div>
           </div>
+      </GlassCard>
+
+      {/* Transactions Table */}
+      <GlassCard
+        variant="elevated"
+        padding="none"
+        className="mt-8 transition-colors animate-in fade-in slide-in-from-bottom-8 duration-700"
+      >
+        <div className="p-6 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center bg-gray-50/30 dark:bg-black/20">
+          <h3 className="font-serif font-bold text-trust-blue dark:text-white text-xl">Recent Financial Activity</h3>
+          <button className="text-gray-400 hover:text-trust-blue dark:hover:text-white">
+            <ArrowUpRight size={20} />
+          </button>
         </div>
-      )}
-
-      {/* Property Calendar Modal */}
-      {calendarProperty && (
-        <PropertyFullCalendarModal
-          property={calendarProperty}
-          onClose={() => setCalendarProperty(null)}
-        />
-      )}
-
-      {/* Footer */}
-      <footer className="bg-white dark:bg-trust-darkcard border-t border-gray-200 dark:border-gray-700 py-6 mt-12 text-center text-xs text-gray-400">
-        <p>&copy; 2024 TrustBnB Inc. Swiss-Albanian Property Management.</p>
-        <div className="mt-2 space-x-4">
-          <button onClick={() => setFooterModalType('PRIVACY')} className="hover:text-trust-blue dark:hover:text-white">Privacy</button>
-          <button onClick={() => setFooterModalType('TERMS')} className="hover:text-trust-blue dark:hover:text-white">Terms</button>
-          <button onClick={() => setFooterModalType('CONTACT')} className="hover:text-trust-blue dark:hover:text-white">Support</button>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm text-left">
+            <thead className="bg-trust-gray dark:bg-gray-800 text-gray-500 dark:text-gray-400 uppercase text-xs">
+              <tr>
+                <th className="px-6 py-3 font-medium">Date</th>
+                <th className="px-6 py-3 font-medium">Description</th>
+                <th className="px-6 py-3 font-medium">Category</th>
+                <th className="px-6 py-3 font-medium">Ledger Hash</th>
+                <th className="px-6 py-3 font-medium text-right">Amount</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
+              {MOCK_TRANSACTIONS.map((tx) => (
+                <tr key={tx.id} className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                  <td className="px-6 py-4 text-gray-600 dark:text-gray-400">{tx.date}</td>
+                  <td className="px-6 py-4 font-medium text-trust-blue dark:text-white">{tx.description}</td>
+                  <td className="px-6 py-4">
+                    <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs text-gray-500 dark:text-gray-300">{tx.category}</span>
+                  </td>
+                  <td className="px-6 py-4">
+                    <span className="font-mono text-[10px] text-gray-400">{tx.hash}</span>
+                  </td>
+                  <td className={`px-6 py-4 text-right font-medium ${tx.type === 'Credit' ? 'text-trust-green' : 'text-gray-800 dark:text-gray-200'}`}>
+                    {privacyMode ? <span className="blur-sm select-none text-xs text-gray-400">ENCRYPTED</span> : (
+                      <>
+                        {tx.type === 'Debit' ? '-' : '+'}€{tx.amount}
+                      </>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-      </footer>
+      </GlassCard>
+    </>
+  )
+}
+          </main >
 
-      {/* AI Chat Widget */}
-      <AIChat isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} contextData={aiContext} />
+  {/* Floating Chat Buttons */ }
+  < div className = "fixed bottom-6 right-6 flex flex-col gap-3 z-40" >
 
-      {/* Support Chat Widget */}
-      <OwnerChatWidget
-        isOpen={isSupportOpen}
-        onClose={() => setIsSupportOpen(false)}
-        currentUser={currentUser}
+    {/* Support Chat Button */ }
+    < button
+onClick = {() => {
+  setIsSupportOpen(!isSupportOpen);
+  setIsChatOpen(false); // Close AI chat if open
+}}
+className = "w-14 h-14 bg-trust-blue text-white rounded-full shadow-lg hover:bg-opacity-90 transition-transform hover:scale-105 flex items-center justify-center relative group"
+title = "Contact Support"
+  >
+  <div className="absolute inset-0 bg-trust-blue rounded-full animate-ping opacity-20"></div>
+{
+  unreadSupportCount > 0 && (
+    <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-[10px] flex items-center justify-center rounded-full font-bold border-2 border-white dark:border-trust-darkbg z-10">
+      {unreadSupportCount}
+    </span>
+  )
+}
+<MessageSquare size={24} />
+{/* Tooltip */ }
+<div className="absolute right-full mr-3 top-1/2 -translate-y-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+  Admin Support
+</div>
+        </button >
+
+  {/* AI Chat Button */ }
+  < button
+onClick = {() => {
+  setIsChatOpen(!isChatOpen);
+  setIsSupportOpen(false); // Close Support chat if open
+}}
+className = "w-14 h-14 bg-white dark:bg-trust-darkcard text-trust-blue dark:text-white rounded-full shadow-lg border border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-transform hover:scale-105 flex items-center justify-center group"
+title = "AI Assistant"
+  >
+  <Sparkles size={24} />
+{/* Tooltip */ }
+<div className="absolute right-full mr-3 top-1/2 -translate-y-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+  AI Assistant
+</div>
+        </button >
+      </div >
+
+  {/* Interactive Detail Modal (General) */ }
+{
+  activeModal && (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+      <div
+        className="absolute inset-0 bg-trust-blue/30 backdrop-blur-sm transition-opacity"
+        onClick={() => setActiveModal(null)}
       />
+      <div className="relative bg-white dark:bg-trust-darkcard w-full max-w-md rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
 
-      <FooterInfoModal
-        type={footerModalType}
-        onClose={() => setFooterModalType(null)}
-      />
+        <div className="bg-trust-blue dark:bg-black/40 px-6 py-4 flex justify-between items-center text-white border-b border-white/10">
+          <div className="flex items-center gap-2">
+            {activeModal === 'OCCUPANCY' ? <Home size={18} /> : <Wallet size={18} />}
+            <span className="font-serif font-bold text-lg">
+              {activeModal === 'OCCUPANCY' ? 'Occupancy Portfolio' : 'Payout Breakdown'}
+            </span>
+          </div>
+          <button
+            onClick={() => setActiveModal(null)}
+            className="p-1 hover:bg-white/10 rounded-full transition-colors"
+          >
+            <X size={20} />
+          </button>
+        </div>
 
-      <PropertyOnboardingModal
-        isOpen={isOnboardingOpen}
-        onClose={() => setIsOnboardingOpen(false)}
-        onComplete={(data) => {
-          addProperty(data);
-          setIsOnboardingOpen(false);
-        }}
-      />
+        <div className="p-6">
+          {activeModal === 'OCCUPANCY' ? (
+            <div className="space-y-6">
+              <div className="text-center">
+                <h3 className="text-4xl font-bold text-trust-blue dark:text-white">82%</h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Average Portfolio Occupancy</p>
+              </div>
+              <div className="space-y-4">
+                {MOCK_PROPERTIES.map(prop => (
+                  <div key={prop.id}>
+                    <div className="flex justify-between text-sm mb-1">
+                      <span className="font-medium text-gray-700 dark:text-gray-200">{prop.name}</span>
+                      <span className="font-bold text-trust-blue dark:text-white">{prop.occupancyRate}%</span>
+                    </div>
+                    <div className="h-2 w-full bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
+                      <div
+                        className={`h-full rounded-full ${prop.occupancyRate > 80 ? 'bg-green-500' : prop.occupancyRate > 50 ? 'bg-orange-400' : 'bg-red-400'}`}
+                        style={{ width: `${prop.occupancyRate}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-6">
+              <div className="bg-trust-gray dark:bg-gray-800 p-4 rounded-xl flex items-center justify-between">
+                <div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 uppercase font-semibold">Net Transfer</p>
+                  <h3 className="text-2xl font-bold text-trust-blue dark:text-white">{renderFinancialValue('€2,450.00')}</h3>
+                </div>
+                <div className="text-right">
+                  <p className="text-xs text-gray-500 dark:text-gray-400">Est. Date</p>
+                  <p className="text-sm font-bold text-trust-blue dark:text-white">Aug 15, 2024</p>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-600 dark:text-gray-400">Gross Bookings (July)</span>
+                  <span className="font-medium text-gray-900 dark:text-white">{renderFinancialValue('€3,200.00')}</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-600 dark:text-gray-400">Cleaning Fees Collected</span>
+                  <span className="font-medium text-green-600">{renderFinancialValue('+€450.00')}</span>
+                </div>
+                <div className="border-t border-gray-100 dark:border-gray-700 my-2"></div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-600 dark:text-gray-400">TrustBnB Commission (20%)</span>
+                  <span className="font-medium text-red-500">{renderFinancialValue('-€730.00')}</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-600 dark:text-gray-400">VAT & Tourism Tax</span>
+                  <span className="font-medium text-red-500">{renderFinancialValue('-€470.00')}</span>
+                </div>
+              </div>
+
+              <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg flex gap-3 items-start">
+                <CreditCard size={16} className="text-trust-blue dark:text-blue-300 mt-0.5" />
+                <p className="text-xs text-trust-blue dark:text-blue-200">
+                  Transfer initiated to <strong>UBS Account (...8921)</strong>. Funds typically arrive within 2 business days.
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
+  )
+}
+
+{/* Property Calendar Modal */ }
+{
+  calendarProperty && (
+    <PropertyFullCalendarModal
+      property={calendarProperty}
+      onClose={() => setCalendarProperty(null)}
+    />
+  )
+}
+
+{/* Footer */ }
+<footer className="bg-white dark:bg-trust-darkcard border-t border-gray-200 dark:border-gray-700 py-6 mt-12 text-center text-xs text-gray-400">
+  <p>&copy; 2024 TrustBnB Inc. Swiss-Albanian Property Management.</p>
+  <div className="mt-2 space-x-4">
+    <button onClick={() => setFooterModalType('PRIVACY')} className="hover:text-trust-blue dark:hover:text-white">Privacy</button>
+    <button onClick={() => setFooterModalType('TERMS')} className="hover:text-trust-blue dark:hover:text-white">Terms</button>
+    <button onClick={() => setFooterModalType('CONTACT')} className="hover:text-trust-blue dark:hover:text-white">Support</button>
+  </div>
+</footer>
+
+{/* AI Chat Widget */ }
+<AIChat isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} contextData={aiContext} />
+
+{/* Support Chat Widget */ }
+        <OwnerChatWidget
+          isOpen={isSupportOpen}
+          onClose={() => setIsSupportOpen(false)}
+          currentUser={currentUser}
+        />
+
+        <FooterInfoModal
+          type={footerModalType}
+          onClose={() => setFooterModalType(null)}
+        />
+
+        <PropertyOnboardingModal
+          isOpen={isOnboardingOpen}
+          onClose={() => setIsOnboardingOpen(false)}
+          onComplete={(data) => {
+            addProperty(data);
+            setIsOnboardingOpen(false);
+          }}
+        />
+    </div >
   );
 };
