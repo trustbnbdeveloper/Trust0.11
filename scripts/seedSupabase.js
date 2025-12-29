@@ -115,9 +115,69 @@ async function runMigrationsIfNeeded() {
   const client = new Client(clientConfig);
   try {
     await client.connect();
+    await runDbOperations(client);
+  } catch (err) {
+    const isNetworkError = err.code === 'ENETUNREACH' || err.code === 'EADDRNOTAVAIL' || err.code === 'ECONNREFUSED';
+    const isSupabase = dbUrl.includes('supabase.co');
 
-    // Create profiles table if it doesn't exist (matching schema.sql)
-    const createProfiles = `
+    if (isNetworkError && isSupabase) {
+      console.warn('\nDebug: Primary connection failed with network error. Detected Supabase URL.');
+      console.warn('Debug: Attempting to auto-discover IPv4 Connection Pooler (Supavisor) to bypass IPv6-only restriction...');
+
+      const regions = [
+        'eu-central-1', 'us-east-1', 'us-west-1', 'us-west-2', 'eu-west-1', 'eu-west-2', 'eu-west-3',
+        'ap-southeast-1', 'ap-southeast-2', 'ap-northeast-1', 'ap-northeast-2', 'sa-east-1', 'ca-central-1', 'ap-south-1'
+      ];
+
+      const dns = await import('dns');
+      const { promises: { resolve4 } } = dns.default || dns;
+
+      let workingClient = null;
+
+      for (const region of regions) {
+        const poolerHost = `aws-0-${region}.pooler.supabase.com`;
+        try {
+          // Check if this pooler host exists (has IPv4 IP)
+          await resolve4(poolerHost);
+
+          // If it resolves, try to connect
+          console.log(`Debug: Probing pooler: ${poolerHost} (Port 6543)...`);
+
+          // Try Transaction Mode port (6543) which is most reliable on poolers
+          const poolerConfig = { ...clientConfig, host: poolerHost, port: 6543 };
+          const probeClient = new Client(poolerConfig);
+
+          await probeClient.connect();
+          console.log(`Debug: SUCCESS! Connected via ${poolerHost}`);
+          workingClient = probeClient;
+          break; // Found it!
+        } catch (probeErr) {
+          // Ignore DNS errors (region doesn't match) or Auth errors (wrong region/host for this user)
+          // console.log(`Probe failed for ${region}: ${probeErr.message}`);
+          if (workingClient) break;
+        }
+      }
+
+      if (workingClient) {
+        await runDbOperations(workingClient);
+        await workingClient.end();
+        console.log('Seed complete (via IPv4 Pooler).');
+        process.exit(0);
+      } else {
+        console.error('Debug: Could not find a working IPv4 pooler. Please update SUPABASE_DB_URL to use the Session Pooler connection string.');
+        throw err;
+      }
+    } else {
+      throw err;
+    }
+  } finally {
+    if (client._connected) await client.end();
+  }
+}
+
+async function runDbOperations(client) {
+  // Create profiles table if it doesn't exist (matching schema.sql)
+  const createProfiles = `
       CREATE TABLE IF NOT EXISTS profiles (
         user_id uuid PRIMARY KEY REFERENCES auth.users ON DELETE CASCADE,
         full_name text,
@@ -129,10 +189,10 @@ async function runMigrationsIfNeeded() {
       );
     `;
 
-    await client.query(createProfiles);
+  await client.query(createProfiles);
 
-    // Safely migrate columns if they don't exist (handle legacy schema)
-    const migrateColumns = `
+  // Safely migrate columns if they don't exist (handle legacy schema)
+  const migrateColumns = `
       DO $$
       BEGIN
         BEGIN
@@ -157,15 +217,9 @@ async function runMigrationsIfNeeded() {
         END;
       END $$;
     `;
-    await client.query(migrateColumns);
+  await client.query(migrateColumns);
 
-    console.log('Migrations complete.');
-  } catch (err) {
-    console.error('Migration error:', err?.message || err);
-    throw err;
-  } finally {
-    await client.end();
-  }
+  console.log('Migrations complete.');
 }
 
 async function tableExists(name) {
